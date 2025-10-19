@@ -86,9 +86,9 @@ function App() {
 
           <div className="container mx-auto relative">
             <div className="flex items-center justify-center gap-4 mb-3" >
-              {/* Add image to the left */}
+              {/* Use public folder path for Vercel/static hosting */}
               <img
-                src="././RealPageLogo.png"
+                src="/RealPageLogo.png"
                 alt="Header Logo"
                 style={{ height: '48px', width: '338px' }}
               />
