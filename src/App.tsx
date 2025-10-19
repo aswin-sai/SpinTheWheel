@@ -90,7 +90,7 @@ function App() {
               <img
                 src="/RealPageLogo.png"
                 alt="Header Logo"
-                style={{ height: '48px', width: '338px' }}
+                style={{ height: '48px', width: '288px' }}
               />
               <div className="animate-float">
                 <Trophy className="w-10 h-10 text-realpage-orange drop-shadow-lg" />
