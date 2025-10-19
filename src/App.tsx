@@ -85,7 +85,13 @@ function App() {
           <div className="absolute inset-0 bg-gradient-to-r from-transparent via-realpage-orange/10 to-transparent animate-pulse"></div>
 
           <div className="container mx-auto relative">
-            <div className="flex items-center justify-center gap-4 mb-3">
+            <div className="flex items-center justify-center gap-4 mb-3" >
+              {/* Add image to the left */}
+              <img
+                src="././RealPageLogo.png"
+                alt="Header Logo"
+                style={{ height: '48px', width: '338px' }}
+              />
               <div className="animate-float">
                 <Trophy className="w-10 h-10 text-realpage-orange drop-shadow-lg" />
               </div>
