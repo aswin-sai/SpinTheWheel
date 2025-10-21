@@ -379,7 +379,7 @@ export function SpinWheel({ segments, onSpinComplete }: SpinWheelProps) {
                       <div className="inline-flex items-center gap-3 mb-4">
                         <div className="w-4 h-4 rounded-full bg-realpage-orange animate-pulse"></div>
                         <p className="text-2xl font-semibold text-white/90 uppercase tracking-widest">
-                          Winner
+                          Here's your question 🤔💭
                         </p>
                         <div className="w-4 h-4 rounded-full bg-realpage-orange animate-pulse"></div>
                       </div>
@@ -460,7 +460,7 @@ export function SpinWheel({ segments, onSpinComplete }: SpinWheelProps) {
                     <div className="inline-flex items-center gap-3 mb-4">
                       <div className="w-4 h-4 rounded-full bg-realpage-orange animate-pulse"></div>
                       <p className="text-2xl font-semibold text-white/90 uppercase tracking-widest">
-                        Winner
+                        Here's your question 🤔💭
                       </p>
                       <div className="w-4 h-4 rounded-full bg-realpage-orange animate-pulse"></div>
                     </div>
