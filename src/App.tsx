@@ -148,10 +148,15 @@ function App() {
           <div className="container mx-auto relative">
             <div className="flex items-center justify-center gap-4 mb-3" >
               {/* Use public folder path for Vercel/static hosting */}
-              {/* <img
-                src="/RealPageLogo.png"
+               {/* <img
+                src="/public/RealPageLogo.png"
                 alt="Header Logo"
-                style={{ height: '48px', width: '288px' }}
+                style={{ height: '50px', width: '220px' }}
+              />
+              <img
+                src="/public/CareerElevate.jpg"
+                alt="Header Logo"
+                style={{ height: '170px', width: '180px' }}
               /> */}
               <div className="animate-float">
                 <Trophy className="w-10 h-10 text-realpage-orange drop-shadow-lg" />
