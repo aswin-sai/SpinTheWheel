@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { SpinWheel } from './components/SpinWheel';
 import { SegmentManager } from './components/SegmentManager';
 import { History } from './components/History';
-import { Trophy, Sparkles } from 'lucide-react';
+import { Trophy} from 'lucide-react';
 
 interface Topic {
   name: string;
