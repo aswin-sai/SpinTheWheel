@@ -187,7 +187,7 @@ function App() {
           <div className="container mx-auto relative">
             {/* RealPage image at the left corner */}
             <img
-              src="/public/RealPage.png"
+              src="/RealPage.png"
               alt="Header Logo"
               style={{
                 height: '100px',
@@ -200,7 +200,7 @@ function App() {
               }}
             />
             <img
-              src="/public/CareerElevate.jpg"
+              src="/CareerElevate.jpg"
               alt="Header Logo"
               style={{
                 height: '140px',
