@@ -69,7 +69,7 @@ function Logos({ fullscreen = false }: { fullscreen?: boolean }) {
           height: fullscreen ? '150px' : '100px',
           width: fullscreen ? '500px' : '330px',
           position: fullscreen ? 'fixed' : 'absolute',
-          left: fullscreen ? 32 : -160,
+          left: fullscreen ? -30 : -10,
           top: fullscreen ? 80 : '50%', // was 32, now 80 for more space from top
           transform: fullscreen ? 'none' : 'translateY(-50%)',
           zIndex: 101,
@@ -84,7 +84,7 @@ function Logos({ fullscreen = false }: { fullscreen?: boolean }) {
           width: fullscreen ? '190px' : '160px',
           position: fullscreen ? 'fixed' : 'absolute',
           right: fullscreen ? 32 : undefined,
-          left: fullscreen ? undefined : 1500,
+          left: fullscreen ? 1300 : 1300,
           top: fullscreen ? 80 : '50%', // was 32, now 80 for more space from top
           transform: fullscreen ? 'none' : 'translateY(-50%)',
           zIndex: 101,
