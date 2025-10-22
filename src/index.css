@@ -8,9 +8,10 @@
   }
 
   body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
       'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
       sans-serif;
+    overflow-x: hidden;
   }
 }
 
@@ -33,5 +34,23 @@
   .custom-scrollbar::-webkit-scrollbar-thumb:hover,
   .scrollbar-thin::-webkit-scrollbar-thumb:hover {
     @apply bg-realpage-orange/70;
+  }
+
+  .glassmorphism {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .glow-orange {
+    box-shadow: 0 0 20px rgba(255, 107, 0, 0.3),
+                0 0 40px rgba(255, 107, 0, 0.2),
+                0 0 60px rgba(255, 107, 0, 0.1);
+  }
+
+  .glow-blue {
+    box-shadow: 0 0 20px rgba(0, 32, 91, 0.3),
+                0 0 40px rgba(0, 32, 91, 0.2);
   }
 }
