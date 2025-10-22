@@ -58,6 +58,43 @@ const defaultSegments: Topic[] = [
   { name: '46', description: 'What is the full form of RIOT?' },
 ];
 
+function Logos({ fullscreen = false }: { fullscreen?: boolean }) {
+  // Use fixed positioning in fullscreen, absolute otherwise
+  return (
+    <>
+      <img
+        src="/RealPage.png"
+        alt="Header Logo"
+        style={{
+          height: fullscreen ? '150px' : '100px',
+          width: fullscreen ? '500px' : '330px',
+          position: fullscreen ? 'fixed' : 'absolute',
+          left: fullscreen ? 32 : -160,
+          top: fullscreen ? 80 : '50%', // was 32, now 80 for more space from top
+          transform: fullscreen ? 'none' : 'translateY(-50%)',
+          zIndex: 101,
+          pointerEvents: 'none',
+        }}
+      />
+      <img
+        src="/CareerElevate.jpg"
+        alt="Header Logo"
+        style={{
+          height: fullscreen ? '165px' : '140px',
+          width: fullscreen ? '190px' : '160px',
+          position: fullscreen ? 'fixed' : 'absolute',
+          right: fullscreen ? 32 : undefined,
+          left: fullscreen ? undefined : 1500,
+          top: fullscreen ? 80 : '50%', // was 32, now 80 for more space from top
+          transform: fullscreen ? 'none' : 'translateY(-50%)',
+          zIndex: 101,
+          pointerEvents: 'none',
+        }}
+      />
+    </>
+  );
+}
+
 function App() {
   // Load custom topics from localStorage
   const [customTopics, setCustomTopics] = useState<Topic[]>(() => {
@@ -183,36 +220,10 @@ function App() {
       <div className="relative z-10">
         <header className="relative py-6 px-4 border-b-4 border-realpage-orange bg-gradient-to-r from-realpage-blue via-realpage-blue to-realpage-blue/95 shadow-2xl">
           <div className="absolute inset-0 bg-gradient-to-r from-transparent via-realpage-orange/10 to-transparent animate-pulse"></div>
-
           <div className="container mx-auto relative">
             {/* RealPage image at the left corner */}
-            <img
-              src="/RealPage.png"
-              alt="Header Logo"
-              style={{
-                height: '100px',
-                width: '330px',
-                position: 'absolute',
-                left: -160,
-                top: '50%',
-                transform: 'translateY(-50%)',
-                zIndex: 10,
-              }}
-            />
-            <img
-              src="/CareerElevate.jpg"
-              alt="Header Logo"
-              style={{
-                height: '140px',
-                width: '160px',
-                position: 'absolute',
-                left: 1500,
-                top: '50%',
-                transform: 'translateY(-50%)',
-                zIndex: 10,
-              }}
-            />
-            
+            <Logos />
+
             <div className="flex items-center justify-center gap-4 mb-3">
               {/* <img ... /> removed from here */}
               <div className="animate-float">
@@ -248,6 +259,7 @@ function App() {
               <SpinWheel
                 segments={segments}
                 onSpinComplete={handleSpinComplete}
+                LogosComponent={(props: any) => <Logos {...props} fullscreen />}
               />
             </div>
 

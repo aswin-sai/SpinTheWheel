@@ -12,6 +12,7 @@ interface Topic {
 interface SpinWheelProps {
   segments: Topic[];
   onSpinComplete: (result: string) => void;
+  LogosComponent?: React.ComponentType;
 }
 
 const COLORS = [
@@ -20,7 +21,7 @@ const COLORS = [
   '#FFFFFF',
 ];
 
-export function SpinWheel({ segments, onSpinComplete }: SpinWheelProps) {
+export function SpinWheel({ segments, onSpinComplete, LogosComponent }: SpinWheelProps) {
   const [isSpinning, setIsSpinning] = useState(false);
   const [rotation, setRotation] = useState(0);
   const [selectedSegment, setSelectedSegment] = useState<Topic | null>(null);
@@ -123,6 +124,13 @@ export function SpinWheel({ segments, onSpinComplete }: SpinWheelProps) {
         className={`relative flex items-center justify-center ${isFullscreen ? 'fixed inset-0 z-[100] bg-black/80' : ''}`}
         style={isFullscreen ? { minHeight: '100vh' } : {}}
       >
+        {/* Show logos in fullscreen mode */}
+        {isFullscreen && LogosComponent && (
+          <div className="pointer-events-none select-none">
+            <LogosComponent fullscreen />
+          </div>
+        )}
+
         {/* Fullscreen button */}
         {!isFullscreen && (
           <button
