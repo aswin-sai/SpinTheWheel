@@ -185,18 +185,36 @@ function App() {
           <div className="absolute inset-0 bg-gradient-to-r from-transparent via-realpage-orange/10 to-transparent animate-pulse"></div>
 
           <div className="container mx-auto relative">
-            <div className="flex items-center justify-center gap-4 mb-3" >
-              {/* Use public folder path for Vercel/static hosting */}
-               {/* <img
-                src="/public/RealPageLogo.png"
-                alt="Header Logo"
-                style={{ height: '50px', width: '260px' }}
-              />
-              <img
-                src="/public/CareerElevate.jpg"
-                alt="Header Logo"
-                style={{ height: '170px', width: '180px' }}
-              /> */}
+            {/* RealPage image at the left corner */}
+            <img
+              src="/public/RealPage.png"
+              alt="Header Logo"
+              style={{
+                height: '100px',
+                width: '330px',
+                position: 'absolute',
+                left: -160,
+                top: '50%',
+                transform: 'translateY(-50%)',
+                zIndex: 10,
+              }}
+            />
+            <img
+              src="/public/CareerElevate.jpg"
+              alt="Header Logo"
+              style={{
+                height: '140px',
+                width: '160px',
+                position: 'absolute',
+                left: 1500,
+                top: '50%',
+                transform: 'translateY(-50%)',
+                zIndex: 10,
+              }}
+            />
+            
+            <div className="flex items-center justify-center gap-4 mb-3">
+              {/* <img ... /> removed from here */}
               <div className="animate-float">
                 <Trophy className="w-10 h-10 text-realpage-orange drop-shadow-lg" />
               </div>
