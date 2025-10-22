@@ -19,7 +19,7 @@ const defaultSegments: Topic[] = [
   { name: '7', description: 'When did RealPage get acquired by Thoma Bravo?' },
   { name: '8', description: 'Name 2 countries that RealPage Operates from apart from US, India and Philippines.' },
   { name: '9', description: 'What is the Our (RealPage) Purpose?' },
-  { name: '10', description: 'In which platform can you find RealPage Recognitions?' },
+  { name: '10', description: 'In which platform can you find RealPage Recognitions' },
   { name: '11', description: 'Which is the Employee Resource Group for Women employees in RealPage?' },
   { name: '12', description: 'Most widely used product in RealPage' },
   { name: '13', description: 'Who is the Chief Financial Officer for RealPage?' },
@@ -65,21 +65,29 @@ function App() {
     return saved ? JSON.parse(saved) : [];
   });
 
+  // Persist names of topics permanently removed via the UI (clicking X)
+  const [removedTopics, setRemovedTopics] = useState<string[]>(() => {
+    const saved = localStorage.getItem('removedTopics');
+    return saved ? JSON.parse(saved) : [];
+  });
+
   const [segments, setSegments] = useState<Topic[]>(() => {
     const saved = localStorage.getItem('wheelSegments');
     // Validate loaded segments are objects with name/description
     if (saved) {
       try {
         const arr = JSON.parse(saved);
-        if (Array.isArray(arr) && arr.every(s => typeof s.name === 'string')) {
+        if (Array.isArray(arr) && arr.every((s: any) => typeof s.name === 'string')) {
           return arr;
         }
       } catch {}
     }
-    // On first load, use default + custom topics
+    // On first load, use default + custom topics, but exclude permanently removed topics
     const customSaved = localStorage.getItem('customTopics');
     const customArr = customSaved ? JSON.parse(customSaved) : [];
-    return [...defaultSegments, ...customArr];
+    const removedSaved = localStorage.getItem('removedTopics');
+    const removedArr = removedSaved ? JSON.parse(removedSaved) : [];
+    return [...defaultSegments, ...customArr].filter((s) => !removedArr.includes(s.name));
   });
 
   const [history, setHistory] = useState<Topic[]>(() => {
@@ -100,27 +108,58 @@ function App() {
     localStorage.setItem('customTopics', JSON.stringify(customTopics));
   }, [customTopics]);
 
+  // Save removed topics to localStorage when changed
+  useEffect(() => {
+    localStorage.setItem('removedTopics', JSON.stringify(removedTopics));
+  }, [removedTopics]);
+
+  // // Restore all topics if removedTopics is not empty (one-time on mount)
+  // useEffect(() => {
+  //   if (removedTopics.length > 0) {
+  //     setRemovedTopics([]);
+  //     // Optionally, also reset segments to show all topics immediately:
+  //     setSegments([...defaultSegments, ...customTopics]);
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, []);
+
   // Accepts Topic object only
   const handleAddSegment = (segment: Topic) => {
+    const name = segment.name.trim();
     if (
-      segment.name.trim() &&
-      !segments.some(s => s.name.trim().toLowerCase() === segment.name.trim().toLowerCase())
+      name &&
+      !segments.some(s => s.name.trim().toLowerCase() === name.toLowerCase())
     ) {
-      setSegments([...segments, { name: segment.name.trim(), description: segment.description || '' }]);
+      setSegments([...segments, { name, description: segment.description || '' }]);
       // Add to custom topics if not already present
-      if (!customTopics.some(s => s.name.trim().toLowerCase() === segment.name.trim().toLowerCase())) {
-        setCustomTopics([...customTopics, { name: segment.name.trim(), description: segment.description || '' }]);
+      if (!customTopics.some(s => s.name.trim().toLowerCase() === name.toLowerCase())) {
+        setCustomTopics([...customTopics, { name, description: segment.description || '' }]);
+      }
+      // If this name was previously permanently removed, undo that removal (user explicitly re-added)
+      if (removedTopics.some(n => n.toLowerCase() === name.toLowerCase())) {
+        setRemovedTopics(removedTopics.filter(n => n.toLowerCase() !== name.toLowerCase()));
       }
     }
   };
 
   const handleRemoveSegment = (index: number) => {
+    const seg = segments[index];
+    if (!seg) return;
+    // Remove from current segments
     setSegments(segments.filter((_, i) => i !== index));
+
+    // If the removed item was added via UI (custom) remove it from customTopics
+    setCustomTopics(customTopics.filter(s => s.name !== seg.name));
+
+    // Mark this topic name as permanently removed so reset won't re-add it
+    if (!removedTopics.includes(seg.name)) {
+      setRemovedTopics([...removedTopics, seg.name]);
+    }
   };
 
   const handleClearAll = () => {
-    // Reset to default + custom topics
-    setSegments([...defaultSegments, ...customTopics]);
+    // Reset to default + custom topics but exclude permanently removed topics
+    setSegments([...defaultSegments, ...customTopics].filter(s => !removedTopics.includes(s.name)));
     setHistory([]);
   };
 
@@ -129,7 +168,7 @@ function App() {
     const winner = segments.find(s => s.name === result);
     if (winner) {
       setHistory([winner, ...history.slice(0, 4)]);
-      // Remove the winner from the segments
+      // Remove the winner from the segments (transient removal — DO NOT add to removedTopics)
       setSegments(segments.filter(s => s.name !== result));
     }
   };
@@ -151,7 +190,7 @@ function App() {
                {/* <img
                 src="/public/RealPageLogo.png"
                 alt="Header Logo"
-                style={{ height: '50px', width: '220px' }}
+                style={{ height: '50px', width: '260px' }}
               />
               <img
                 src="/public/CareerElevate.jpg"

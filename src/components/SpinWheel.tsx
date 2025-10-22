@@ -15,8 +15,8 @@ interface SpinWheelProps {
 }
 
 const COLORS = [
-  '#00205B',
-  '#FF6B00',
+  '#001a4aff',
+  '#e56205ff',
   '#FFFFFF',
 ];
 
