@@ -60,7 +60,7 @@ export function SegmentManager({
               type="text"
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
-              placeholder="Add new topic..."
+              placeholder="Add new Index."
               className="flex-1 px-4 py-3 bg-white/10 border-2 border-white/20 rounded-xl text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-realpage-orange focus:border-realpage-orange/50 transition-all backdrop-blur-sm hover:bg-white/15"
               maxLength={20}
             />
@@ -70,7 +70,7 @@ export function SegmentManager({
               type="text"
               value={descValue}
               onChange={(e) => setDescValue(e.target.value)}
-              placeholder="Add description (optional)..."
+              placeholder="Enter a question."
               className="flex-1 px-4 py-2 bg-white/10 border-2 border-white/20 rounded-xl text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-realpage-orange focus:border-realpage-orange/50 transition-all backdrop-blur-sm hover:bg-white/15"
               maxLength={80}
             />
