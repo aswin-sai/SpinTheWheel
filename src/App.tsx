@@ -80,7 +80,7 @@ function Logos({ fullscreen = false }: { fullscreen?: boolean }) {
         src="/CareerElevate.jpg"
         alt="Header Logo"
         style={{
-          height: fullscreen ? '165px' : '140px',
+          height: fullscreen ? '170px' : '140px',
           width: fullscreen ? '190px' : '160px',
           position: fullscreen ? 'fixed' : 'absolute',
           right: fullscreen ? 32 : undefined,
@@ -279,5 +279,4 @@ function App() {
     </div>
   );
 }
-
 export default App;
