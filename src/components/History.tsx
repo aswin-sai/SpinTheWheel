@@ -14,13 +14,14 @@ export function History({ history }: HistoryProps) {
   if (history.length === 0) return null;
 
   return (
-    <div className="relative bg-gradient-to-br from-realpage-blue/40 via-realpage-blue/60 to-realpage-blue/40 backdrop-blur-xl rounded-2xl p-6 shadow-2xl border-2 border-realpage-orange/30">
-      <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent rounded-2xl"></div>
+    <div className="relative bg-gradient-to-br from-realpage-blue/40 via-realpage-blue/60 to-realpage-blue/40 backdrop-blur-xl rounded-2xl p-6 shadow-2xl border-2 border-realpage-orange/40 hover:border-realpage-orange/60 transition-all">
+      <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent rounded-2xl"></div>
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,rgba(255,107,0,0.1),transparent_50%)] rounded-2xl"></div>
 
       <div className="relative">
-        <div className="flex items-center gap-2 mb-6">
+        <div className="flex items-center gap-3 mb-6">
           <div className="p-2 bg-realpage-orange/20 rounded-lg">
-            <Clock className="w-5 h-5 text-realpage-orange" />
+            <Clock className="w-6 h-6 text-realpage-orange" />
           </div>
           <h2 className="text-2xl font-bold text-white">Recent Winners</h2>
         </div>
@@ -30,32 +31,31 @@ export function History({ history }: HistoryProps) {
             {history.map((item, index) => (
               <motion.div
                 key={`${item.name}-${index}`}
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: 20 }}
-                transition={{ duration: 0.3, delay: index * 0.05 }}
+                initial={{ opacity: 0, x: -20, scale: 0.95 }}
+                animate={{ opacity: 1, x: 0, scale: 1 }}
+                exit={{ opacity: 0, x: 20, scale: 0.95 }}
+                transition={{ duration: 0.3, delay: index * 0.05, type: "spring" }}
                 className="group"
               >
-                <div className="relative bg-white/5 backdrop-blur-sm px-4 py-4 rounded-xl border-2 border-white/10 hover:border-realpage-orange/50 transition-all hover:bg-white/10">
+                <div className={`relative bg-white/5 backdrop-blur-sm px-4 py-4 rounded-xl border-2 ${index === 0 ? 'border-realpage-orange/50' : 'border-white/10'} hover:border-realpage-orange/50 transition-all hover:bg-white/10 hover:shadow-lg ${index === 0 ? 'shadow-lg shadow-realpage-orange/20' : ''}`}>
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
                       {index === 0 && (
-                        <Trophy className="w-5 h-5 text-realpage-orange animate-pulse" />
+                        <Trophy className="w-6 h-6 text-realpage-orange animate-pulse drop-shadow-lg" />
                       )}
-                      <span className="text-white font-semibold text-lg">{item.name}</span>
+                      <span className={`font-semibold text-base ${index === 0 ? 'text-realpage-orange' : 'text-white'}`}>{item.name}</span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <span className="text-xs font-medium text-white/50 px-2 py-1 bg-white/5 rounded-lg">
+                      <span className={`text-xs font-bold px-3 py-1.5 rounded-lg ${index === 0 ? 'bg-realpage-orange/20 text-realpage-orange border border-realpage-orange/30' : 'bg-white/5 text-white/50'}`}>
                         #{history.length - index}
                       </span>
                     </div>
                   </div>
-                  {/* Show description if present */}
                   {item.description && (
-                    <div className="mt-2 text-white/60 text-sm italic">{item.description}</div>
+                    <div className="mt-2 text-white/70 text-sm font-medium">{item.description}</div>
                   )}
                   {index === 0 && (
-                    <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-realpage-orange/10 to-transparent opacity-50"></div>
+                    <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-realpage-orange/15 to-transparent opacity-50"></div>
                   )}
                 </div>
               </motion.div>
@@ -63,8 +63,8 @@ export function History({ history }: HistoryProps) {
           </AnimatePresence>
         </div>
 
-        <div className="mt-4 pt-4 border-t-2 border-white/20">
-          <p className="text-sm text-white/60 text-center">
+        <div className="mt-6 pt-4 border-t-2 border-white/30">
+          <p className="text-sm text-white/70 text-center font-semibold">
             Showing last {history.length} {history.length === 1 ? 'spin' : 'spins'}
           </p>
         </div>

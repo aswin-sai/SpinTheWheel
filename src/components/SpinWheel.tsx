@@ -121,21 +121,19 @@ export function SpinWheel({ segments, onSpinComplete, LogosComponent }: SpinWhee
     <div className="flex flex-col items-center gap-8 w-full">
       <div
         ref={wheelRef}
-        className={`relative flex items-center justify-center ${isFullscreen ? 'fixed inset-0 z-[100] bg-black/80' : ''}`}
+        className={`relative flex items-center justify-center ${isFullscreen ? 'fixed inset-0 z-[100] bg-gradient-to-br from-black via-realpage-blue/20 to-black' : ''}`}
         style={isFullscreen ? { minHeight: '100vh' } : {}}
       >
-        {/* Show logos in fullscreen mode */}
         {isFullscreen && LogosComponent && (
           <div className="pointer-events-none select-none">
             <LogosComponent fullscreen />
           </div>
         )}
 
-        {/* Fullscreen button */}
         {!isFullscreen && (
           <button
             onClick={handleFullscreen}
-            className="absolute top-4 right-4 z-50 p-3 rounded-full bg-white/20 hover:bg-realpage-orange/80 border-2 border-white/30 shadow-lg transition-all"
+            className="absolute top-4 right-4 z-50 p-3 rounded-full bg-white/20 hover:bg-realpage-orange/80 border-2 border-white/30 shadow-lg transition-all hover:scale-110 active:scale-95 glow-orange"
             title="Fullscreen"
             type="button"
           >
@@ -145,7 +143,7 @@ export function SpinWheel({ segments, onSpinComplete, LogosComponent }: SpinWhee
         {isFullscreen && (
           <button
             onClick={handleFullscreen}
-            className="absolute top-4 right-4 z-50 p-3 rounded-full bg-white/20 hover:bg-realpage-orange/80 border-2 border-white/30 shadow-lg transition-all"
+            className="absolute top-4 right-4 z-50 p-3 rounded-full bg-white/20 hover:bg-realpage-orange/80 border-2 border-white/30 shadow-lg transition-all hover:scale-110 active:scale-95 glow-orange"
             title="Exit Fullscreen"
             type="button"
           >
@@ -153,18 +151,18 @@ export function SpinWheel({ segments, onSpinComplete, LogosComponent }: SpinWhee
           </button>
         )}
 
-        {/* Wheel container */}
         <div
-          className={`relative rounded-full bg-white/5 backdrop-blur-sm border-4 border-realpage-orange/30 shadow-2xl flex items-center justify-center`}
+          className={`relative rounded-full bg-white/5 backdrop-blur-sm border-4 border-realpage-orange/50 shadow-2xl flex items-center justify-center glow-orange transition-all duration-300 ${isSpinning ? 'scale-105' : 'scale-100'}`}
           style={{
             width: wheelSize,
             height: wheelSize,
             margin: isFullscreen ? 'auto' : undefined,
           }}
         >
-          {/* Triangle pointer - always at top center, overlapping wheel edge */}
-          <div
+          <motion.div
             className="absolute z-50"
+            animate={isSpinning ? { y: [0, -5, 0] } : {}}
+            transition={{ duration: 0.3, repeat: isSpinning ? Infinity : 0 }}
             style={{
               left: '50%',
               top: `calc(50% - ${wheelRadius}px)`,
@@ -181,12 +179,11 @@ export function SpinWheel({ segments, onSpinComplete, LogosComponent }: SpinWhee
                 borderLeft: `${Math.round(wheelSize * 0.03)}px solid transparent`,
                 borderRight: `${Math.round(wheelSize * 0.03)}px solid transparent`,
                 borderBottom: `${Math.round(wheelSize * 0.045)}px solid #FF6B00`,
-                filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.5))',
+                filter: 'drop-shadow(0 4px 12px rgba(255, 107, 0, 0.8))',
               }}
             ></div>
-          </div>
+          </motion.div>
 
-          {/* Spin button - should NOT spin */}
           <div
             className="absolute z-50"
             style={{
@@ -200,13 +197,13 @@ export function SpinWheel({ segments, onSpinComplete, LogosComponent }: SpinWhee
               disabled={isSpinning || segments.length === 0}
               className={`
                 group relative rounded-full font-black text-lg
-                bg-gradient-to-r from-realpage-orange to-realpage-orange/90
-                hover:from-realpage-orange hover:to-realpage-orange
+                bg-gradient-to-br from-realpage-orange via-realpage-orange to-realpage-orange/80
+                hover:from-realpage-orange hover:via-realpage-orange/90 hover:to-realpage-orange
                 disabled:from-gray-600 disabled:to-gray-700 disabled:cursor-not-allowed
                 transition-all duration-300
-                shadow-2xl shadow-realpage-orange/50
+                shadow-2xl shadow-realpage-orange/60
                 disabled:shadow-none
-                border-4 border-white/20
+                border-4 border-white/30
                 ${isSpinning ? 'animate-pulse-glow' : 'hover:scale-110 active:scale-95'}
               `}
               style={{
@@ -215,8 +212,9 @@ export function SpinWheel({ segments, onSpinComplete, LogosComponent }: SpinWhee
                 fontSize: Math.max(18, Math.round(wheelSize * 0.025)),
               }}
               whileTap={{ scale: 0.9 }}
+              whileHover={{ scale: 1.1 }}
             >
-              <div className="absolute inset-0 rounded-full bg-gradient-to-r from-white/0 via-white/20 to-white/0 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+              <div className="absolute inset-0 rounded-full bg-gradient-to-r from-white/0 via-white/30 to-white/0 opacity-0 group-hover:opacity-100 transition-opacity"></div>
               <span className="relative flex flex-col items-center justify-center gap-1">
                 {isSpinning ? (
                   <>
@@ -226,16 +224,16 @@ export function SpinWheel({ segments, onSpinComplete, LogosComponent }: SpinWhee
                     >
                       <Play style={{ width: Math.round(wheelSize * 0.045), height: Math.round(wheelSize * 0.045) }} />
                     </motion.div>
-                    <span className="text-xs">Spinning</span>
+                    <span className="text-xs font-bold">Spinning</span>
                   </>
                 ) : (
                   <>
                     <Play style={{ width: Math.round(wheelSize * 0.045), height: Math.round(wheelSize * 0.045) }} />
-                    <span className="text-sm">SPIN</span>
+                    <span className="text-sm font-extrabold">SPIN</span>
                   </>
                 )}
               </span>
-              <div className="absolute -inset-1 rounded-full bg-gradient-to-r from-realpage-orange to-white opacity-0 group-hover:opacity-30 blur-xl transition-opacity -z-10"></div>
+              <div className="absolute -inset-2 rounded-full bg-gradient-to-r from-realpage-orange to-white opacity-0 group-hover:opacity-40 blur-2xl transition-opacity -z-10"></div>
             </motion.button>
           </div>
 
@@ -366,48 +364,48 @@ export function SpinWheel({ segments, onSpinComplete, LogosComponent }: SpinWhee
                   initial={{ scale: 0.5, opacity: 0, y: 50 }}
                   animate={{ scale: 1, opacity: 1, y: 0 }}
                   exit={{ scale: 0.5, opacity: 0, y: 50 }}
-                  transition={{ type: "spring", duration: 0.6 }}
-                  className="relative bg-gradient-to-br from-realpage-blue via-realpage-blue to-realpage-blue/95 backdrop-blur-xl px-16 py-14 rounded-3xl border-8 border-realpage-orange shadow-2xl max-w-3xl w-[90%]"
+                  transition={{ type: "spring", duration: 0.6, bounce: 0.4 }}
+                  className="relative bg-gradient-to-br from-realpage-blue via-realpage-blue to-realpage-blue/95 backdrop-blur-xl px-12 md:px-16 py-12 md:py-14 rounded-3xl border-8 border-realpage-orange shadow-2xl max-w-3xl w-[95%] md:w-[90%] glow-orange"
                   onClick={(e) => e.stopPropagation()}
                 >
-                  <div className="absolute inset-0 bg-gradient-to-br from-white/5 via-transparent to-realpage-orange/10 rounded-3xl"></div>
+                  <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-realpage-orange/20 rounded-3xl"></div>
+                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(255,107,0,0.1),transparent_50%)] rounded-3xl"></div>
                   <button
                     onClick={() => setSelectedSegment(null)}
-                    className="absolute -top-6 -right-6 p-4 rounded-full bg-realpage-orange text-white hover:bg-realpage-orange/80 shadow-2xl transition-all hover:scale-110 border-4 border-white z-10"
+                    className="absolute -top-6 -right-6 p-4 rounded-full bg-gradient-to-br from-realpage-orange to-realpage-orange/80 text-white hover:from-realpage-orange hover:to-realpage-orange shadow-2xl transition-all hover:scale-110 active:scale-95 border-4 border-white z-10 glow-orange"
                     aria-label="Close"
                   >
                     <X className="w-8 h-8" />
                   </button>
-                  <div className="relative text-center space-y-4">
+                  <div className="relative text-center space-y-6">
                     <motion.div
                       initial={{ scale: 0 }}
                       animate={{ scale: 1 }}
-                      transition={{ delay: 0.2, type: "spring" }}
+                      transition={{ delay: 0.2, type: "spring", bounce: 0.5 }}
                     >
-                      <div className="inline-flex items-center gap-3 mb-4">
-                        <div className="w-4 h-4 rounded-full bg-realpage-orange animate-pulse"></div>
-                        <p className="text-2xl font-semibold text-white/90 uppercase tracking-widest">
-                          Here's your question 🤔💭
+                      <div className="inline-flex items-center gap-3 mb-4 px-6 py-3 bg-white/5 rounded-full border border-realpage-orange/30">
+                        <div className="w-3 h-3 rounded-full bg-realpage-orange animate-pulse shadow-lg shadow-realpage-orange/50"></div>
+                        <p className="text-xl md:text-2xl font-bold text-white/95 uppercase tracking-widest">
+                          Question Time
                         </p>
-                        <div className="w-4 h-4 rounded-full bg-realpage-orange animate-pulse"></div>
+                        <div className="w-3 h-3 rounded-full bg-realpage-orange animate-pulse shadow-lg shadow-realpage-orange/50"></div>
                       </div>
                     </motion.div>
                     <motion.p
                       initial={{ y: 20, opacity: 0 }}
                       animate={{ y: 0, opacity: 1 }}
                       transition={{ delay: 0.3 }}
-                      className="text-7xl font-black text-realpage-orange break-words leading-tight drop-shadow-2xl"
-                      style={{ textShadow: '0 0 40px rgba(255, 107, 0, 0.5)' }}
+                      className="text-5xl md:text-7xl font-black text-realpage-orange break-words leading-tight drop-shadow-2xl"
+                      style={{ textShadow: '0 0 40px rgba(255, 107, 0, 0.6), 0 0 80px rgba(255, 107, 0, 0.3)' }}
                     >
                       {selectedSegment.name}
                     </motion.p>
-                    {/* Show description under winner name if present */}
                     {selectedSegment.description && (
                       <motion.div
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.35 }}
-                        className="text-xl text-white/80 mt-4 italic"
+                        className="text-lg md:text-xl text-white/90 mt-6 font-medium px-4"
                       >
                         {selectedSegment.description}
                       </motion.div>
@@ -415,10 +413,10 @@ export function SpinWheel({ segments, onSpinComplete, LogosComponent }: SpinWhee
                     <motion.div
                       initial={{ scale: 0 }}
                       animate={{ scale: 1 }}
-                      transition={{ delay: 0.4 }}
+                      transition={{ delay: 0.4, type: "spring" }}
                       className="pt-6 border-t-2 border-white/20"
                     >
-                      <p className="text-lg text-white/80 italic">
+                      <p className="text-base md:text-lg text-white/70 font-medium">
                         Time to showcase your knowledge!
                       </p>
                     </motion.div>
@@ -445,32 +443,33 @@ export function SpinWheel({ segments, onSpinComplete, LogosComponent }: SpinWhee
                 initial={{ scale: 0.5, opacity: 0, y: 50 }}
                 animate={{ scale: 1, opacity: 1, y: 0 }}
                 exit={{ scale: 0.5, opacity: 0, y: 50 }}
-                transition={{ type: "spring", duration: 0.6 }}
-                className="relative bg-gradient-to-br from-realpage-blue via-realpage-blue to-realpage-blue/95 backdrop-blur-xl px-16 py-14 rounded-3xl border-8 border-realpage-orange shadow-2xl max-w-3xl w-[90%]"
+                transition={{ type: "spring", duration: 0.6, bounce: 0.4 }}
+                className="relative bg-gradient-to-br from-realpage-blue via-realpage-blue to-realpage-blue/95 backdrop-blur-xl px-12 md:px-16 py-12 md:py-14 rounded-3xl border-8 border-realpage-orange shadow-2xl max-w-3xl w-[95%] md:w-[90%] glow-orange"
                 onClick={(e) => e.stopPropagation()}
               >
-                <div className="absolute inset-0 bg-gradient-to-br from-white/5 via-transparent to-realpage-orange/10 rounded-3xl"></div>
+                <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-realpage-orange/20 rounded-3xl"></div>
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(255,107,0,0.1),transparent_50%)] rounded-3xl"></div>
 
                 <button
                   onClick={() => setSelectedSegment(null)}
-                  className="absolute -top-6 -right-6 p-4 rounded-full bg-realpage-orange text-white hover:bg-realpage-orange/80 shadow-2xl transition-all hover:scale-110 border-4 border-white z-10"
+                  className="absolute -top-6 -right-6 p-4 rounded-full bg-gradient-to-br from-realpage-orange to-realpage-orange/80 text-white hover:from-realpage-orange hover:to-realpage-orange shadow-2xl transition-all hover:scale-110 active:scale-95 border-4 border-white z-10 glow-orange"
                   aria-label="Close"
                 >
                   <X className="w-8 h-8" />
                 </button>
 
-                <div className="relative text-center space-y-4">
+                <div className="relative text-center space-y-6">
                   <motion.div
                     initial={{ scale: 0 }}
                     animate={{ scale: 1 }}
-                    transition={{ delay: 0.2, type: "spring" }}
+                    transition={{ delay: 0.2, type: "spring", bounce: 0.5 }}
                   >
-                    <div className="inline-flex items-center gap-3 mb-4">
-                      <div className="w-4 h-4 rounded-full bg-realpage-orange animate-pulse"></div>
-                      <p className="text-2xl font-semibold text-white/90 uppercase tracking-widest">
-                        Here's your question 🤔💭
+                    <div className="inline-flex items-center gap-3 mb-4 px-6 py-3 bg-white/5 rounded-full border border-realpage-orange/30">
+                      <div className="w-3 h-3 rounded-full bg-realpage-orange animate-pulse shadow-lg shadow-realpage-orange/50"></div>
+                      <p className="text-xl md:text-2xl font-bold text-white/95 uppercase tracking-widest">
+                        Question Time
                       </p>
-                      <div className="w-4 h-4 rounded-full bg-realpage-orange animate-pulse"></div>
+                      <div className="w-3 h-3 rounded-full bg-realpage-orange animate-pulse shadow-lg shadow-realpage-orange/50"></div>
                     </div>
                   </motion.div>
 
@@ -478,19 +477,18 @@ export function SpinWheel({ segments, onSpinComplete, LogosComponent }: SpinWhee
                     initial={{ y: 20, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
                     transition={{ delay: 0.3 }}
-                    className="text-7xl font-black text-realpage-orange break-words leading-tight drop-shadow-2xl"
-                    style={{ textShadow: '0 0 40px rgba(255, 107, 0, 0.5)' }}
+                    className="text-5xl md:text-7xl font-black text-realpage-orange break-words leading-tight drop-shadow-2xl"
+                    style={{ textShadow: '0 0 40px rgba(255, 107, 0, 0.6), 0 0 80px rgba(255, 107, 0, 0.3)' }}
                   >
                     {selectedSegment.name}
                   </motion.p>
 
-                  {/* Show description under winner name if present */}
                   {selectedSegment.description && (
                     <motion.div
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 0.35 }}
-                      className="text-xl text-white/80 mt-4 italic"
+                      className="text-lg md:text-xl text-white/90 mt-6 font-medium px-4"
                     >
                       {selectedSegment.description}
                     </motion.div>
@@ -499,10 +497,10 @@ export function SpinWheel({ segments, onSpinComplete, LogosComponent }: SpinWhee
                   <motion.div
                     initial={{ scale: 0 }}
                     animate={{ scale: 1 }}
-                    transition={{ delay: 0.4 }}
+                    transition={{ delay: 0.4, type: "spring" }}
                     className="pt-6 border-t-2 border-white/20"
                   >
-                    <p className="text-lg text-white/80 italic">
+                    <p className="text-base md:text-lg text-white/70 font-medium">
                       Time to showcase your knowledge!
                     </p>
                   </motion.div>
