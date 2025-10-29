@@ -133,7 +133,7 @@ export function SpinWheel({ segments, onSpinComplete, LogosComponent }: SpinWhee
         {!isFullscreen && (
           <button
             onClick={handleFullscreen}
-            className="absolute top-4 right-4 z-50 p-3 rounded-full bg-white/20 hover:bg-realpage-orange/80 border-2 border-white/30 shadow-lg transition-all hover:scale-110 active:scale-95 glow-orange"
+            className="absolute top-4 right-4 z-50 p-3 rounded-xl bg-realpage-orange/90 hover:bg-realpage-orange border-2 border-white/50 shadow-xl transition-all hover:scale-110 active:scale-95 glow-orange"
             title="Fullscreen"
             type="button"
           >
@@ -143,7 +143,7 @@ export function SpinWheel({ segments, onSpinComplete, LogosComponent }: SpinWhee
         {isFullscreen && (
           <button
             onClick={handleFullscreen}
-            className="absolute top-4 right-4 z-50 p-3 rounded-full bg-white/20 hover:bg-realpage-orange/80 border-2 border-white/30 shadow-lg transition-all hover:scale-110 active:scale-95 glow-orange"
+            className="absolute top-4 right-4 z-[150] p-3 rounded-xl bg-realpage-orange/90 hover:bg-realpage-orange border-2 border-white/50 shadow-xl transition-all hover:scale-110 active:scale-95 glow-orange"
             title="Exit Fullscreen"
             type="button"
           >
