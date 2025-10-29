@@ -11,13 +11,13 @@ export function SegmentManager({ onAddSegment }) {
   };
 
   return (
-    <div>
+    <div className="w-full">
       <button
-        className="flex items-center gap-2 px-6 py-3 bg-realpage-orange text-white rounded-xl font-bold shadow-lg hover:bg-realpage-orange/80 transition-all"
+        className="w-full flex items-center justify-center gap-3 px-6 py-4 bg-gradient-to-r from-realpage-orange to-realpage-orange/90 hover:from-realpage-orange hover:to-realpage-orange text-white rounded-xl font-bold shadow-lg hover:shadow-xl transition-all hover:scale-105 active:scale-95 border-2 border-realpage-orange/50"
         onClick={() => setOpen(true)}
       >
-        <List className="w-5 h-5" />
-        Questions
+        <List className="w-6 h-6" />
+        <span className="text-lg">Manage Questions</span>
       </button>
       <QuestionsDialog open={open} onClose={() => setOpen(false)} onAddToWheel={handleAddToWheel} />
     </div>

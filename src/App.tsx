@@ -15,31 +15,34 @@ function Logos({ fullscreen = false }: { fullscreen?: boolean }) {
     <>
       <img
         src="/RealPage.png"
-        alt="Header Logo"
+        alt="RealPage Logo"
+        className="object-contain"
         style={{
-          height: fullscreen ? '150px' : '100px',
-          width: fullscreen ? '500px' : '330px',
+          height: fullscreen ? '120px' : '80px',
+          width: 'auto',
           position: fullscreen ? 'fixed' : 'absolute',
-          left: fullscreen ? -30 : -10,
-          top: fullscreen ? 80 : '50%', // was 32, now 80 for more space from top
+          left: fullscreen ? '24px' : '8px',
+          top: fullscreen ? '24px' : '50%',
           transform: fullscreen ? 'none' : 'translateY(-50%)',
           zIndex: 101,
           pointerEvents: 'none',
+          filter: 'drop-shadow(0 4px 12px rgba(0, 0, 0, 0.3))',
         }}
       />
       <img
         src="/CareerElevate.jpg"
-        alt="Header Logo"
+        alt="Career Elevate Logo"
+        className="object-contain rounded-lg"
         style={{
-          height: fullscreen ? '170px' : '140px',
-          width: fullscreen ? '190px' : '160px',
+          height: fullscreen ? '120px' : '80px',
+          width: 'auto',
           position: fullscreen ? 'fixed' : 'absolute',
-          right: fullscreen ? 32 : undefined,
-          left: fullscreen ? 1300 : 1300,
-          top: fullscreen ? 80 : '50%', // was 32, now 80 for more space from top
+          right: fullscreen ? '24px' : '8px',
+          top: fullscreen ? '24px' : '50%',
           transform: fullscreen ? 'none' : 'translateY(-50%)',
           zIndex: 101,
           pointerEvents: 'none',
+          filter: 'drop-shadow(0 4px 12px rgba(0, 0, 0, 0.3))',
         }}
       />
     </>
@@ -172,34 +175,34 @@ function App() {
                 <div className="relative bg-gradient-to-br from-realpage-blue/40 via-realpage-blue/60 to-realpage-blue/40 backdrop-blur-xl rounded-2xl p-6 shadow-2xl border-2 border-realpage-orange/40 hover:border-realpage-orange/60 transition-all">
                   <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent rounded-2xl"></div>
                   <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,107,0,0.1),transparent_50%)] rounded-2xl"></div>
-                  
+
                   <div className="relative">
                     <div className="flex items-center justify-between mb-6">
                       <h2 className="text-2xl font-bold text-white">Current Wheel</h2>
                       <button
                         onClick={handleClearAll}
-                        className="px-4 py-2 text-sm font-semibold bg-white/10 hover:bg-realpage-orange/20 rounded-xl transition-all border-2 border-white/20 hover:border-realpage-orange/50 hover:scale-105 active:scale-95"
+                        className="px-4 py-2 text-sm font-semibold bg-red-500/80 hover:bg-red-500 text-white rounded-xl transition-all border-2 border-red-400/50 hover:border-red-400 hover:scale-105 active:scale-95 shadow-lg"
                         title="Clear all"
                       >
                         Clear All
                       </button>
                     </div>
-                    
+
                     <div className="space-y-3 max-h-[300px] overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-realpage-orange/50 scrollbar-track-white/10">
                       {segments.map((segment, index) => (
                         <div
                           key={index}
                           className="flex items-center justify-between bg-white/5 backdrop-blur-sm px-4 py-3 rounded-xl border-2 border-white/10 hover:border-realpage-orange/50 transition-all group hover:bg-white/10 hover:shadow-lg"
                         >
-                          <div>
-                            <span className="text-white font-semibold text-base">{segment.name}</span>
+                          <div className="flex-1 min-w-0">
+                            <span className="text-white font-semibold text-base block">{segment.name}</span>
                             {segment.description && (
-                              <div className="text-white/60 text-sm mt-1">{segment.description}</div>
+                              <div className="text-white/60 text-sm mt-1 line-clamp-2">{segment.description}</div>
                             )}
                           </div>
                           <button
                             onClick={() => handleRemoveSegment(index)}
-                            className="text-white/50 hover:text-red-500 transition-all opacity-0 group-hover:opacity-100 p-2 hover:bg-red-500/20 rounded-lg hover:scale-110 active:scale-95"
+                            className="ml-3 flex-shrink-0 w-8 h-8 flex items-center justify-center text-white/50 hover:text-white hover:bg-red-500/90 transition-all opacity-100 rounded-lg hover:scale-110 active:scale-95 text-2xl font-bold border-2 border-transparent hover:border-red-400"
                             title="Remove from wheel"
                           >
                             ×
@@ -207,7 +210,7 @@ function App() {
                         </div>
                       ))}
                     </div>
-                    
+
                     <div className="mt-6 pt-4 border-t-2 border-white/30">
                       <div className="flex items-center justify-between">
                         <p className="text-sm font-semibold text-white/80">Total Questions:</p>
