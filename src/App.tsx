@@ -167,6 +167,59 @@ function App() {
                 onAddSegment={handleAddSegment}
               />
 
+              {/* Display current wheel segments with remove option */}
+              {segments.length > 0 && (
+                <div className="relative bg-gradient-to-br from-realpage-blue/40 via-realpage-blue/60 to-realpage-blue/40 backdrop-blur-xl rounded-2xl p-6 shadow-2xl border-2 border-realpage-orange/40 hover:border-realpage-orange/60 transition-all">
+                  <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent rounded-2xl"></div>
+                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,107,0,0.1),transparent_50%)] rounded-2xl"></div>
+                  
+                  <div className="relative">
+                    <div className="flex items-center justify-between mb-6">
+                      <h2 className="text-2xl font-bold text-white">Current Wheel</h2>
+                      <button
+                        onClick={handleClearAll}
+                        className="px-4 py-2 text-sm font-semibold bg-white/10 hover:bg-realpage-orange/20 rounded-xl transition-all border-2 border-white/20 hover:border-realpage-orange/50 hover:scale-105 active:scale-95"
+                        title="Clear all"
+                      >
+                        Clear All
+                      </button>
+                    </div>
+                    
+                    <div className="space-y-3 max-h-[300px] overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-realpage-orange/50 scrollbar-track-white/10">
+                      {segments.map((segment, index) => (
+                        <div
+                          key={index}
+                          className="flex items-center justify-between bg-white/5 backdrop-blur-sm px-4 py-3 rounded-xl border-2 border-white/10 hover:border-realpage-orange/50 transition-all group hover:bg-white/10 hover:shadow-lg"
+                        >
+                          <div>
+                            <span className="text-white font-semibold text-base">{segment.name}</span>
+                            {segment.description && (
+                              <div className="text-white/60 text-sm mt-1">{segment.description}</div>
+                            )}
+                          </div>
+                          <button
+                            onClick={() => handleRemoveSegment(index)}
+                            className="text-white/50 hover:text-red-500 transition-all opacity-0 group-hover:opacity-100 p-2 hover:bg-red-500/20 rounded-lg hover:scale-110 active:scale-95"
+                            title="Remove from wheel"
+                          >
+                            ×
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                    
+                    <div className="mt-6 pt-4 border-t-2 border-white/30">
+                      <div className="flex items-center justify-between">
+                        <p className="text-sm font-semibold text-white/80">Total Questions:</p>
+                        <div className="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-br from-realpage-orange/20 to-realpage-orange/30 rounded-xl border-2 border-realpage-orange/40 shadow-lg">
+                          <span className="text-2xl font-black text-realpage-orange drop-shadow-lg">{segments.length}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
               <History history={history} />
             </div>
           </div>
@@ -178,4 +231,3 @@ function App() {
 
 export default App;
 
-  
