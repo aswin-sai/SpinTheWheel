@@ -108,6 +108,23 @@ function App() {
     setHistory([]);
   };
 
+  // Add function to repopulate wheel from history
+  const handleRepopulateWheel = () => {
+    // Get all questions from history and add them back to wheel with sequential numbering
+    const uniqueQuestions = history.filter((historyItem, index, self) => 
+      index === self.findIndex(t => t.description === historyItem.description)
+    );
+    
+    const repopulatedSegments = uniqueQuestions.map((item, index) => ({
+      name: String(index + 1),
+      description: item.description,
+      answers: item.answers
+    }));
+    
+    setSegments(repopulatedSegments);
+    setHistory([]); // Clear history after repopulating
+  };
+
   const handleSpinComplete = (result: string) => {
     const winner = segments.find(s => s.name === result);
     if (winner) {
@@ -226,6 +243,30 @@ function App() {
                         </div>
                       </div>
                     </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Add Repopulate button when history exists but wheel is empty or has items */}
+              {history.length > 0 && (
+                <div className="relative bg-gradient-to-br from-green-600/40 via-green-600/60 to-green-600/40 backdrop-blur-xl rounded-2xl p-6 shadow-2xl border-2 border-green-400/40 hover:border-green-400/60 transition-all">
+                  <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent rounded-2xl"></div>
+                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(34,197,94,0.1),transparent_50%)] rounded-2xl"></div>
+                  
+                  <div className="relative text-center">
+                    <h3 className="text-xl font-bold text-white mb-3">Repopulate Wheel</h3>
+                    <p className="text-white/80 text-sm mb-4">
+                      {history.length} question{history.length > 1 ? 's' : ''} in history
+                    </p>
+                    <button
+                      onClick={handleRepopulateWheel}
+                      className="w-full px-6 py-3 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white rounded-xl font-bold shadow-lg hover:shadow-xl transition-all hover:scale-105 active:scale-95 border-2 border-green-400/50"
+                    >
+                      Restore All Questions to Wheel
+                    </button>
+                    <p className="text-white/60 text-xs mt-3">
+                      This will add all asked questions back to the wheel
+                    </p>
                   </div>
                 </div>
               )}
