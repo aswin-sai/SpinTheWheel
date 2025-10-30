@@ -84,7 +84,13 @@ function App() {
       name &&
       !segments.some(s => s.name.trim().toLowerCase() === name.toLowerCase())
     ) {
-      setSegments([...segments, { name, description: segment.description || '', answers: segment.answers }]);
+      // Use sequential numbering: next number is current length + 1
+      const sequentialNumber = segments.length + 1;
+      setSegments([...segments, { 
+        name: String(sequentialNumber), 
+        description: segment.description || '', 
+        answers: segment.answers 
+      }]);
     }
   };
 
