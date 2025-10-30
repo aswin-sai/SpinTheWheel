@@ -110,18 +110,22 @@ function App() {
 
   // Add function to repopulate wheel from history
   const handleRepopulateWheel = () => {
-    // Get all questions from history and add them back to wheel with sequential numbering
+    // Get all questions from history (remove duplicates)
     const uniqueQuestions = history.filter((historyItem, index, self) => 
       index === self.findIndex(t => t.description === historyItem.description)
     );
     
-    const repopulatedSegments = uniqueQuestions.map((item, index) => ({
+    // Append history questions to existing wheel segments
+    const combinedSegments = [...segments, ...uniqueQuestions];
+    
+    // Renumber all segments sequentially from 1
+    const renumberedSegments = combinedSegments.map((item, index) => ({
       name: String(index + 1),
       description: item.description,
       answers: item.answers
     }));
     
-    setSegments(repopulatedSegments);
+    setSegments(renumberedSegments);
     setHistory([]); // Clear history after repopulating
   };
 
@@ -186,6 +190,8 @@ function App() {
                 segments={segments}
                 onSpinComplete={handleSpinComplete}
                 LogosComponent={(props: any) => <Logos {...props} fullscreen />}
+                onRepopulateWheel={handleRepopulateWheel}
+                historyCount={history.length}
               />
             </div>
 

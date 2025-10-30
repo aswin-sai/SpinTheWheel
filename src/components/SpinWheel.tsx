@@ -14,6 +14,8 @@ interface SpinWheelProps {
   segments: Topic[];
   onSpinComplete: (result: string) => void;
   LogosComponent?: React.ComponentType;
+  onRepopulateWheel?: () => void; // Add this prop
+  historyCount?: number; // Add this prop
 }
 
 const COLORS = [
@@ -22,7 +24,7 @@ const COLORS = [
   '#FFFFFF',
 ];
 
-export function SpinWheel({ segments, onSpinComplete, LogosComponent }: SpinWheelProps) {
+export function SpinWheel({ segments, onSpinComplete, LogosComponent, onRepopulateWheel, historyCount = 0 }: SpinWheelProps) {
   const [isSpinning, setIsSpinning] = useState(false);
   const [rotation, setRotation] = useState(0);
   const [selectedSegment, setSelectedSegment] = useState<Topic | null>(null);
@@ -144,14 +146,28 @@ export function SpinWheel({ segments, onSpinComplete, LogosComponent }: SpinWhee
           </button>
         )}
         {isFullscreen && (
-          <button
-            onClick={handleFullscreen}
-            className="absolute top-4 right-4 z-[150] p-3 rounded-xl bg-realpage-orange/90 hover:bg-realpage-orange border-2 border-white/50 shadow-xl transition-all hover:scale-110 active:scale-95 glow-orange"
-            title="Exit Fullscreen"
-            type="button"
-          >
-            <Minimize2 className="w-6 h-6 text-white" />
-          </button>
+          <>
+            <button
+              onClick={handleFullscreen}
+              className="absolute top-4 right-4 z-[150] p-3 rounded-xl bg-realpage-orange/90 hover:bg-realpage-orange border-2 border-white/50 shadow-xl transition-all hover:scale-110 active:scale-95 glow-orange"
+              title="Exit Fullscreen"
+              type="button"
+            >
+              <Minimize2 className="w-6 h-6 text-white" />
+            </button>
+
+            {/* Add Restore button in fullscreen when history exists */}
+            {historyCount > 0 && onRepopulateWheel && (
+              <button
+                onClick={onRepopulateWheel}
+                className="absolute top-4 left-1/2 transform -translate-x-1/2 z-[150] px-6 py-3 rounded-xl bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white font-bold shadow-xl transition-all hover:scale-105 active:scale-95 border-2 border-green-400/50"
+                title="Restore all questions to wheel"
+                type="button"
+              >
+                Restore All Questions ({historyCount})
+              </button>
+            )}
+          </>
         )}
 
         <div
