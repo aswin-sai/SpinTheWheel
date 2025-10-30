@@ -4,6 +4,7 @@ import { PlusCircle, List } from 'lucide-react';
 interface Question {
   index: number;
   question: string;
+  answers: string;
 }
 
 interface QuestionsDialogProps {
@@ -22,8 +23,11 @@ export function QuestionsDialog({ open, onClose, onAddToWheel }: QuestionsDialog
 
   // Add/edit form state
   const [newQuestion, setNewQuestion] = useState('');
+  const [newAnswer, setNewAnswer] = useState('');
+  const [newIndex, setNewIndex] = useState(''); // Add index input
   const [editIndex, setEditIndex] = useState<number | null>(null);
   const [editValue, setEditValue] = useState('');
+  const [editAnswer, setEditAnswer] = useState('');
 
   // Fetch questions
   const fetchQuestions = () => {
@@ -54,12 +58,19 @@ export function QuestionsDialog({ open, onClose, onAddToWheel }: QuestionsDialog
   // Add question (POST)
   const handleAddQuestion = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!newQuestion.trim()) return;
+    if (!newQuestion.trim() || !newIndex.trim()) return;
+    const indexNum = parseInt(newIndex);
+    if (isNaN(indexNum) || indexNum < 1) {
+      setError('Please enter a valid index number');
+      return;
+    }
+    // Check if index already exists
+    if (questions.some(q => q.index === indexNum)) {
+      setError(`Index #${indexNum} already exists!`);
+      return;
+    }
     setLoading(true);
     setError(null);
-    // Find max index and increment
-    const maxIndex = questions.length > 0 ? Math.max(...questions.map(q => q.index)) : 0;
-    const nextIndex = maxIndex + 1;
     await fetch(`${SUPABASE_URL}/rest/v1/questions`, {
       method: 'POST',
       headers: {
@@ -68,9 +79,11 @@ export function QuestionsDialog({ open, onClose, onAddToWheel }: QuestionsDialog
         'Content-Type': 'application/json',
         Prefer: 'return=representation',
       },
-      body: JSON.stringify([{ index: nextIndex, question: newQuestion }]),
+      body: JSON.stringify([{ index: indexNum, question: newQuestion, answers: newAnswer }]),
     });
     setNewQuestion('');
+    setNewAnswer('');
+    setNewIndex(''); // Reset index input
     fetchQuestions();
   };
 
@@ -80,19 +93,35 @@ export function QuestionsDialog({ open, onClose, onAddToWheel }: QuestionsDialog
     if (editIndex === null || !editValue.trim()) return;
     setLoading(true);
     setError(null);
-    await fetch(`${SUPABASE_URL}/rest/v1/questions?index=eq.${editIndex}`, {
-      method: 'PATCH',
-      headers: {
-        apikey: SUPABASE_KEY,
-        Authorization: `Bearer ${SUPABASE_KEY}`,
-        'Content-Type': 'application/json',
-        Prefer: 'return=representation',
-      },
-      body: JSON.stringify({ question: editValue }),
-    });
-    setEditIndex(null);
-    setEditValue('');
-    fetchQuestions();
+    
+    try {
+      const response = await fetch(`${SUPABASE_URL}/rest/v1/questions?index=eq.${editIndex}`, {
+        method: 'PATCH',
+        headers: {
+          apikey: SUPABASE_KEY,
+          Authorization: `Bearer ${SUPABASE_KEY}`,
+          'Content-Type': 'application/json',
+          Prefer: 'return=representation',
+        },
+        body: JSON.stringify({ 
+          question: editValue,
+          answers: editAnswer || null  // Use null instead of empty string
+        }),
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to update question');
+      }
+      
+      setEditIndex(null);
+      setEditValue('');
+      setEditAnswer('');
+      fetchQuestions();
+    } catch (err) {
+      console.error('Error updating question:', err);
+      setError('Failed to update question');
+      setLoading(false);
+    }
   };
 
   // Delete question (DELETE)
@@ -107,6 +136,18 @@ export function QuestionsDialog({ open, onClose, onAddToWheel }: QuestionsDialog
       },
     });
     fetchQuestions();
+  };
+
+  const handleAddToWheel = (q: Question) => {
+    if (onAddToWheel) {
+      onAddToWheel(q);
+    }
+  };
+
+  const handleEditClick = (q: Question) => {
+    setEditIndex(q.index);
+    setEditValue(q.question);
+    setEditAnswer(q.answers || '');
   };
 
   if (!open) return null;
@@ -128,23 +169,46 @@ export function QuestionsDialog({ open, onClose, onAddToWheel }: QuestionsDialog
           </button>
         </div>
         {/* Add new question */}
-        <form onSubmit={handleAddQuestion} className="mb-6 flex gap-3">
-          <input
-            type="text"
-            value={newQuestion}
-            onChange={e => setNewQuestion(e.target.value)}
-            placeholder="Type a new question..."
-            className="flex-1 px-4 py-3 border-2 border-gray-300 focus:border-realpage-orange focus:outline-none rounded-xl text-gray-800 font-medium transition-all"
-            maxLength={200}
-          />
-          <button
-            type="submit"
-            className="px-6 py-3 bg-gradient-to-r from-realpage-orange to-realpage-orange/90 hover:from-realpage-orange hover:to-realpage-orange text-white rounded-xl font-bold shadow-lg hover:shadow-xl transition-all hover:scale-105 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
-            disabled={loading || !newQuestion.trim()}
-          >
-            Add
-          </button>
+        <form onSubmit={handleAddQuestion} className="mb-6 space-y-3">
+          <div className="flex gap-3">
+            <input
+              type="number"
+              value={newIndex}
+              onChange={e => setNewIndex(e.target.value)}
+              placeholder="Index #"
+              className="w-24 px-4 py-3 border-2 border-gray-300 focus:border-realpage-orange focus:outline-none rounded-xl text-gray-800 font-bold transition-all"
+              min="1"
+              required
+            />
+            <input
+              type="text"
+              value={newQuestion}
+              onChange={e => setNewQuestion(e.target.value)}
+              placeholder="Type a new question..."
+              className="flex-1 px-4 py-3 border-2 border-gray-300 focus:border-realpage-orange focus:outline-none rounded-xl text-gray-800 font-medium transition-all"
+              maxLength={200}
+              required
+            />
+          </div>
+          <div className="flex gap-3">
+            <input
+              type="text"
+              value={newAnswer}
+              onChange={e => setNewAnswer(e.target.value)}
+              placeholder="Type the answer (optional)..."
+              className="flex-1 px-4 py-3 border-2 border-gray-300 focus:border-realpage-orange focus:outline-none rounded-xl text-gray-800 font-medium transition-all"
+              maxLength={500}
+            />
+            <button
+              type="submit"
+              className="px-6 py-3 bg-gradient-to-r from-realpage-orange to-realpage-orange/90 hover:from-realpage-orange hover:to-realpage-orange text-white rounded-xl font-bold shadow-lg hover:shadow-xl transition-all hover:scale-105 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+              disabled={loading || !newQuestion.trim() || !newIndex.trim()}
+            >
+              Add
+            </button>
+          </div>
         </form>
+        
         {loading ? (
           <div className="text-center text-gray-500 py-8 font-semibold">Loading...</div>
         ) : error ? (
@@ -168,52 +232,57 @@ export function QuestionsDialog({ open, onClose, onAddToWheel }: QuestionsDialog
                         onChange={e => setEditValue(e.target.value)}
                         className="flex-1 px-3 py-2 border-2 border-yellow-400 focus:border-yellow-500 focus:outline-none rounded-lg text-gray-800 font-medium"
                         maxLength={200}
+                        placeholder="Edit question"
                         autoFocus
+                      />
+                      <textarea
+                        value={editAnswer}
+                        onChange={e => setEditAnswer(e.target.value)}
+                        className="flex-1 px-3 py-2 border-2 border-yellow-400 focus:border-yellow-500 focus:outline-none rounded-lg text-gray-800 font-medium resize-none"
+                        maxLength={500}
+                        rows={3}
+                        placeholder="Edit answer (optional)"
                       />
                       <div className="flex gap-2 justify-end">
                         <button type="submit" className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg font-bold transition-all hover:scale-105 active:scale-95 shadow-md">Save</button>
-                        <button type="button" className="px-4 py-2 bg-gray-500 hover:bg-gray-600 text-white rounded-lg font-bold transition-all hover:scale-105 active:scale-95 shadow-md" onClick={() => { setEditIndex(null); setEditValue(''); }}>Cancel</button>
+                        <button type="button" className="px-4 py-2 bg-gray-500 hover:bg-gray-600 text-white rounded-lg font-bold transition-all hover:scale-105 active:scale-95 shadow-md" onClick={() => { setEditIndex(null); setEditValue(''); setEditAnswer(''); }}>Cancel</button>
                       </div>
                     </div>
                   </form>
                 ) : (
-                  <div key={q.index} className="p-4 rounded-xl bg-gradient-to-br from-realpage-blue/5 to-realpage-blue/10 border-2 border-realpage-orange/20 hover:border-realpage-orange/40 transition-all shadow-md hover:shadow-lg group">
-                    <div className="flex items-start gap-3">
-                      <div className="flex-shrink-0 w-10 h-10 flex items-center justify-center bg-realpage-orange text-white font-black text-lg rounded-lg shadow-md">
-                        {q.index}
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <div className="text-gray-800 text-base font-semibold break-words">{q.question}</div>
-                      </div>
-                      <div className="flex-shrink-0 flex gap-2">
-                        <button
-                          className="px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-bold transition-all hover:scale-105 active:scale-95 shadow-md text-sm"
-                          onClick={() => { setEditIndex(q.index); setEditValue(q.question); }}
-                          title="Edit question"
-                        >
-                          Edit
-                        </button>
-                        <button
-                          className="px-3 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-bold transition-all hover:scale-105 active:scale-95 shadow-md text-sm"
-                          onClick={() => handleDeleteQuestion(q.index)}
-                          title="Delete question"
-                        >
-                          Delete
-                        </button>
-                        <button
-                          className="px-3 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg font-bold flex items-center gap-1 transition-all hover:scale-105 active:scale-95 shadow-md text-sm"
-                          title="Add to Wheel"
-                          onClick={() => {
-                            if (onAddToWheel) {
-                              onAddToWheel(q);
-                              onClose();
-                            }
-                          }}
-                        >
-                          <PlusCircle className="w-4 h-4" />
-                          Add
-                        </button>
-                      </div>
+                  <div key={q.index} className="p-4 rounded-xl bg-realpage-blue/10 border border-realpage-orange/30 flex items-start gap-3">
+                    <div className="flex-1">
+                      <div className="font-semibold text-realpage-orange text-lg">#{q.index}</div>
+                      <div className="text-gray-800 font-medium mt-1">Q: {q.question}</div>
+                      {q.answers && (
+                        <div className="text-green-700 font-medium mt-2 bg-green-50 p-2 rounded border border-green-200">
+                          <span className="font-bold">A:</span> {q.answers}
+                        </div>
+                      )}
+                    </div>
+                    <div className="flex flex-col gap-2">
+                      <button
+                        className="px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-bold transition-all hover:scale-105 active:scale-95 text-sm"
+                        onClick={() => handleEditClick(q)}
+                        title="Edit question"
+                      >
+                        Edit
+                      </button>
+                      <button
+                        className="px-3 py-1 bg-red-600 hover:bg-red-700 text-white rounded-lg font-bold transition-all hover:scale-105 active:scale-95 text-sm"
+                        onClick={() => handleDeleteQuestion(q.index)}
+                        title="Delete question"
+                      >
+                        Delete
+                      </button>
+                      <button
+                        className="px-3 py-1 bg-green-600 hover:bg-green-700 text-white rounded-lg font-bold flex items-center justify-center gap-1 transition-all hover:scale-105 active:scale-95 text-sm"
+                        title="Add to Wheel"
+                        onClick={() => handleAddToWheel(q)}
+                      >
+                        <PlusCircle className="w-4 h-4" />
+                        Add
+                      </button>
                     </div>
                   </div>
                 )

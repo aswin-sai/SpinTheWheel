@@ -7,6 +7,7 @@ import { Maximize2, Minimize2 } from 'lucide-react';
 interface Topic {
   name: string;
   description: string;
+  answers?: string;
 }
 
 interface SpinWheelProps {
@@ -26,6 +27,7 @@ export function SpinWheel({ segments, onSpinComplete, LogosComponent }: SpinWhee
   const [rotation, setRotation] = useState(0);
   const [selectedSegment, setSelectedSegment] = useState<Topic | null>(null);
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [showAnswer, setShowAnswer] = useState(false);
   const wheelRef = useRef<HTMLDivElement>(null);
 
   const segmentAngle = segments.length > 0 ? 360 / segments.length : 0;
@@ -43,6 +45,7 @@ export function SpinWheel({ segments, onSpinComplete, LogosComponent }: SpinWhee
 
     setIsSpinning(true);
     setSelectedSegment(null);
+    setShowAnswer(false); // Reset answer visibility
 
     // Generate a random spin amount and angle
     const randomSpins = 5 + Math.random() * 3;
@@ -358,7 +361,7 @@ export function SpinWheel({ segments, onSpinComplete, LogosComponent }: SpinWhee
                 exit={{ opacity: 0 }}
                 className="fixed inset-0 z-[200] flex items-center justify-center bg-black/70 backdrop-blur-sm"
                 style={{ pointerEvents: 'auto' }} // ensure clickable
-                onClick={() => setSelectedSegment(null)}
+                onClick={() => { setSelectedSegment(null); setShowAnswer(false); }}
               >
                 <motion.div
                   initial={{ scale: 0.5, opacity: 0, y: 50 }}
@@ -410,10 +413,35 @@ export function SpinWheel({ segments, onSpinComplete, LogosComponent }: SpinWhee
                         {selectedSegment.description}
                       </motion.div>
                     )}
+                    
+                    {/* Show Answer section */}
+                    {selectedSegment.answers && (
+                      <motion.div
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.4 }}
+                        className="mt-6"
+                      >
+                        {showAnswer ? (
+                          <div className="bg-green-500/20 border-2 border-green-400 rounded-xl p-6">
+                            <p className="text-green-300 font-bold text-base uppercase mb-3 tracking-wider">Answer:</p>
+                            <p className="text-white text-lg md:text-xl font-semibold leading-relaxed">{selectedSegment.answers}</p>
+                          </div>
+                        ) : (
+                          <button
+                            onClick={() => setShowAnswer(true)}
+                            className="px-8 py-4 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white font-bold rounded-xl transition-all hover:scale-105 active:scale-95 shadow-2xl border-2 border-green-400/50"
+                          >
+                            Show Answer
+                          </button>
+                        )}
+                      </motion.div>
+                    )}
+
                     <motion.div
                       initial={{ scale: 0 }}
                       animate={{ scale: 1 }}
-                      transition={{ delay: 0.4, type: "spring" }}
+                      transition={{ delay: 0.45, type: "spring" }}
                       className="pt-6 border-t-2 border-white/20"
                     >
                       <p className="text-base md:text-lg text-white/70 font-medium">
@@ -437,7 +465,7 @@ export function SpinWheel({ segments, onSpinComplete, LogosComponent }: SpinWhee
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               className="fixed inset-0 z-[200] flex items-center justify-center bg-black/70 backdrop-blur-sm"
-              onClick={() => setSelectedSegment(null)}
+              onClick={() => { setSelectedSegment(null); setShowAnswer(false); }}
             >
               <motion.div
                 initial={{ scale: 0.5, opacity: 0, y: 50 }}
@@ -494,10 +522,34 @@ export function SpinWheel({ segments, onSpinComplete, LogosComponent }: SpinWhee
                     </motion.div>
                   )}
 
+                  {/* Show Answer section */}
+                  {selectedSegment.answers && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.4 }}
+                      className="mt-6"
+                    >
+                      {showAnswer ? (
+                        <div className="bg-green-500/20 border-2 border-green-400 rounded-xl p-6">
+                          <p className="text-green-300 font-bold text-base uppercase mb-3 tracking-wider">Answer:</p>
+                          <p className="text-white text-lg md:text-xl font-semibold leading-relaxed">{selectedSegment.answers}</p>
+                        </div>
+                      ) : (
+                        <button
+                          onClick={() => setShowAnswer(true)}
+                          className="px-8 py-4 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white font-bold rounded-xl transition-all hover:scale-105 active:scale-95 shadow-2xl border-2 border-green-400/50"
+                        >
+                          Show Answer
+                        </button>
+                      )}
+                    </motion.div>
+                  )}
+
                   <motion.div
                     initial={{ scale: 0 }}
                     animate={{ scale: 1 }}
-                    transition={{ delay: 0.4, type: "spring" }}
+                    transition={{ delay: 0.45, type: "spring" }}
                     className="pt-6 border-t-2 border-white/20"
                   >
                     <p className="text-base md:text-lg text-white/70 font-medium">

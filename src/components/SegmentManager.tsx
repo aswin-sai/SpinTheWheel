@@ -5,9 +5,13 @@ import { QuestionsDialog } from './QuestionsDialog';
 export function SegmentManager({ onAddSegment }) {
   const [open, setOpen] = useState(false);
 
-  // Handler to add question to wheel
+  // Handler to add question to wheel - include answers
   const handleAddToWheel = (q) => {
-    onAddSegment({ name: String(q.index), description: q.question });
+    onAddSegment({ 
+      name: String(q.index), 
+      description: q.question,
+      answers: q.answers || undefined
+    });
   };
 
   return (

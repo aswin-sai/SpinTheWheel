@@ -7,6 +7,7 @@ import { Trophy } from 'lucide-react';
 interface Topic {
   name: string;
   description: string;
+  answers?: string;
 }
 
 function Logos({ fullscreen = false }: { fullscreen?: boolean }) {
@@ -83,7 +84,7 @@ function App() {
       name &&
       !segments.some(s => s.name.trim().toLowerCase() === name.toLowerCase())
     ) {
-      setSegments([...segments, { name, description: segment.description || '' }]);
+      setSegments([...segments, { name, description: segment.description || '', answers: segment.answers }]);
     }
   };
 
