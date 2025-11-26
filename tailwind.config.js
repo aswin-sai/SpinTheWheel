@@ -6,7 +6,16 @@ export default {
       colors: {
         realpage: {
           blue: '#00205B',
+          'blue-dark': '#0C2340',
+          'blue-darker': '#071B2F',
           orange: '#FF6B00',
+          'teal-light': '#7DD3C0',
+          teal: '#5DBEAA',
+          'teal-dark': '#3D9A88',
+          'teal-darker': '#2D7A68',
+          'gray-light': '#D4D4D4',
+          gray: '#A0A0A0',
+          'gray-dark': '#6B6B6B',
         },
       },
       animation: {

@@ -21,21 +21,21 @@ function Logos({ fullscreen = false }: { fullscreen?: boolean }) {
         style={{
           height: fullscreen ? '120px' : '80px',
           width: 'auto',
-          position: fullscreen ? 'fixed' : 'absolute',
-          left: fullscreen ? '24px' : '8px',
-          top: fullscreen ? '24px' : '50%',
-          transform: fullscreen ? 'none' : 'translateY(-50%)',
+          position: 'fixed',
+          left: 0,
+          top: 0,
+          margin: 0,
           zIndex: 101,
           pointerEvents: 'none',
           filter: 'drop-shadow(0 4px 12px rgba(0, 0, 0, 0.3))',
         }}
       />
       <img
-        src="/CareerElevate.jpg"
+        src="/CareerElevate.png"
         alt="Career Elevate Logo"
         className="object-contain rounded-lg"
         style={{
-          height: fullscreen ? '120px' : '80px',
+          height: fullscreen ? '220px' : '160px',
           width: 'auto',
           position: fullscreen ? 'fixed' : 'absolute',
           right: fullscreen ? '24px' : '8px',
@@ -142,22 +142,22 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-realpage-blue via-realpage-blue/90 to-gray-900 text-white overflow-x-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-realpage-blue-dark via-realpage-blue to-realpage-blue-darker text-white overflow-x-hidden">
       <div className="absolute inset-0 opacity-10 pointer-events-none">
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-realpage-orange rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-white rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-realpage-orange/30 rounded-full blur-3xl"></div>
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-realpage-teal rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-realpage-teal-light rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-realpage-teal-dark/30 rounded-full blur-3xl"></div>
       </div>
 
       <div className="relative z-10">
-        <header className="relative py-8 px-4 border-b-4 border-realpage-orange bg-gradient-to-r from-realpage-blue via-realpage-blue to-realpage-blue/95 shadow-2xl glow-orange">
-          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-realpage-orange/10 to-transparent animate-pulse"></div>
+        <header className="relative py-8 px-4 border-b-4 border-realpage-teal bg-gradient-to-r from-realpage-blue-dark via-realpage-blue to-realpage-blue-darker shadow-2xl">
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-realpage-teal/10 to-transparent animate-pulse"></div>
           <div className="container mx-auto relative">
             <Logos />
 
             <div className="flex items-center justify-center gap-3 md:gap-4 mb-4">
               <div className="animate-float hidden sm:block">
-                <Trophy className="w-8 h-8 md:w-12 md:h-12 text-realpage-orange drop-shadow-2xl filter brightness-110" />
+                <Trophy className="w-8 h-8 md:w-12 md:h-12 text-realpage-teal drop-shadow-2xl filter brightness-110" />
               </div>
               <div className="text-center">
                 <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black tracking-tight leading-tight">
@@ -167,17 +167,17 @@ function App() {
                 </h1>
               </div>
               <div className="animate-float hidden sm:block" style={{ animationDelay: '0.5s' }}>
-                <Trophy className="w-8 h-8 md:w-12 md:h-12 text-realpage-orange drop-shadow-2xl filter brightness-110 transform scale-x-[-1]" />
+                <Trophy className="w-8 h-8 md:w-12 md:h-12 text-realpage-teal drop-shadow-2xl filter brightness-110 transform scale-x-[-1]" />
               </div>
             </div>
 
             <div className="text-center space-y-2">
-              <div className="inline-flex items-center gap-3 px-4 md:px-6 py-2 md:py-2.5 rounded-full bg-gradient-to-r from-white/10 via-realpage-orange/20 to-white/10 backdrop-blur-sm border-2 border-realpage-orange/30 shadow-lg">
-                <div className="w-2 md:w-2.5 h-2 md:h-2.5 rounded-full bg-realpage-orange animate-pulse shadow-lg shadow-realpage-orange/50"></div>
+              <div className="inline-flex items-center gap-3 px-4 md:px-6 py-2 md:py-2.5 rounded-full bg-gradient-to-r from-white/10 via-realpage-teal/20 to-white/10 backdrop-blur-sm border-2 border-realpage-teal/30 shadow-lg">
+                <div className="w-2 md:w-2.5 h-2 md:h-2.5 rounded-full bg-realpage-teal animate-pulse shadow-lg shadow-realpage-teal/50"></div>
                 <p className="text-lg md:text-xl lg:text-2xl font-bold text-white/95 tracking-wide">
                   Career Elevate
                 </p>
-                <div className="w-2 md:w-2.5 h-2 md:h-2.5 rounded-full bg-realpage-orange animate-pulse shadow-lg shadow-realpage-orange/50"></div>
+                <div className="w-2 md:w-2.5 h-2 md:h-2.5 rounded-full bg-realpage-teal animate-pulse shadow-lg shadow-realpage-teal/50"></div>
               </div>
             </div>
           </div>
@@ -202,9 +202,9 @@ function App() {
 
               {/* Display current wheel segments with remove option */}
               {segments.length > 0 && (
-                <div className="relative bg-gradient-to-br from-realpage-blue/40 via-realpage-blue/60 to-realpage-blue/40 backdrop-blur-xl rounded-2xl p-6 shadow-2xl border-2 border-realpage-orange/40 hover:border-realpage-orange/60 transition-all">
+                <div className="relative bg-gradient-to-br from-realpage-blue/40 via-realpage-blue-dark/60 to-realpage-blue/40 backdrop-blur-xl rounded-2xl p-6 shadow-2xl border-2 border-realpage-teal/40 hover:border-realpage-teal/60 transition-all">
                   <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent rounded-2xl"></div>
-                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,107,0,0.1),transparent_50%)] rounded-2xl"></div>
+                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(125,211,192,0.1),transparent_50%)] rounded-2xl"></div>
 
                   <div className="relative">
                     <div className="flex items-center justify-between mb-6">
@@ -218,11 +218,11 @@ function App() {
                       </button>
                     </div>
 
-                    <div className="space-y-3 max-h-[300px] overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-realpage-orange/50 scrollbar-track-white/10">
+                    <div className="space-y-3 max-h-[300px] overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-realpage-teal/50 scrollbar-track-white/10">
                       {segments.map((segment, index) => (
                         <div
                           key={index}
-                          className="flex items-center justify-between bg-white/5 backdrop-blur-sm px-4 py-3 rounded-xl border-2 border-white/10 hover:border-realpage-orange/50 transition-all group hover:bg-white/10 hover:shadow-lg"
+                          className="flex items-center justify-between bg-white/5 backdrop-blur-sm px-4 py-3 rounded-xl border-2 border-white/10 hover:border-realpage-teal/50 transition-all group hover:bg-white/10 hover:shadow-lg"
                         >
                           <div className="flex-1 min-w-0">
                             <span className="text-white font-semibold text-base block">{segment.name}</span>
@@ -244,8 +244,8 @@ function App() {
                     <div className="mt-6 pt-4 border-t-2 border-white/30">
                       <div className="flex items-center justify-between">
                         <p className="text-sm font-semibold text-white/80">Total Questions:</p>
-                        <div className="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-br from-realpage-orange/20 to-realpage-orange/30 rounded-xl border-2 border-realpage-orange/40 shadow-lg">
-                          <span className="text-2xl font-black text-realpage-orange drop-shadow-lg">{segments.length}</span>
+                        <div className="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-br from-realpage-teal/20 to-realpage-teal-dark/30 rounded-xl border-2 border-realpage-teal/40 shadow-lg">
+                          <span className="text-2xl font-black text-realpage-teal drop-shadow-lg">{segments.length}</span>
                         </div>
                       </div>
                     </div>
@@ -255,9 +255,9 @@ function App() {
 
               {/* Add Repopulate button when history exists but wheel is empty or has items */}
               {history.length > 0 && (
-                <div className="relative bg-gradient-to-br from-green-600/40 via-green-600/60 to-green-600/40 backdrop-blur-xl rounded-2xl p-6 shadow-2xl border-2 border-green-400/40 hover:border-green-400/60 transition-all">
+                <div className="relative bg-gradient-to-br from-realpage-teal-dark/40 via-realpage-teal/60 to-realpage-teal-dark/40 backdrop-blur-xl rounded-2xl p-6 shadow-2xl border-2 border-realpage-teal-light/40 hover:border-realpage-teal-light/60 transition-all">
                   <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent rounded-2xl"></div>
-                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(34,197,94,0.1),transparent_50%)] rounded-2xl"></div>
+                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(125,211,192,0.1),transparent_50%)] rounded-2xl"></div>
                   
                   <div className="relative text-center">
                     <h3 className="text-xl font-bold text-white mb-3">Repopulate Wheel</h3>
@@ -266,7 +266,7 @@ function App() {
                     </p>
                     <button
                       onClick={handleRepopulateWheel}
-                      className="w-full px-6 py-3 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white rounded-xl font-bold shadow-lg hover:shadow-xl transition-all hover:scale-105 active:scale-95 border-2 border-green-400/50"
+                      className="w-full px-6 py-3 bg-gradient-to-r from-realpage-teal to-realpage-teal-dark hover:from-realpage-teal-light hover:to-realpage-teal text-white rounded-xl font-bold shadow-lg hover:shadow-xl transition-all hover:scale-105 active:scale-95 border-2 border-realpage-teal-light/50"
                     >
                       Restore All Questions to Wheel
                     </button>

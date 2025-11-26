@@ -157,7 +157,7 @@ export function QuestionsDialog({ open, onClose, onAddToWheel }: QuestionsDialog
       <div className="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-3xl max-h-[90vh] overflow-hidden flex flex-col">
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-2xl font-bold text-realpage-blue flex items-center gap-2">
-            <List className="w-6 h-6 text-realpage-orange" />
+            <List className="w-6 h-6 text-realpage-teal" />
             Questions Manager
           </h2>
           <button
@@ -176,7 +176,7 @@ export function QuestionsDialog({ open, onClose, onAddToWheel }: QuestionsDialog
               value={newIndex}
               onChange={e => setNewIndex(e.target.value)}
               placeholder="Index #"
-              className="w-24 px-4 py-3 border-2 border-gray-300 focus:border-realpage-orange focus:outline-none rounded-xl text-gray-800 font-bold transition-all"
+              className="w-24 px-4 py-3 border-2 border-gray-300 focus:border-realpage-teal focus:outline-none rounded-xl text-gray-800 font-bold transition-all"
               min="1"
               required
             />
@@ -185,7 +185,7 @@ export function QuestionsDialog({ open, onClose, onAddToWheel }: QuestionsDialog
               value={newQuestion}
               onChange={e => setNewQuestion(e.target.value)}
               placeholder="Type a new question..."
-              className="flex-1 px-4 py-3 border-2 border-gray-300 focus:border-realpage-orange focus:outline-none rounded-xl text-gray-800 font-medium transition-all"
+              className="flex-1 px-4 py-3 border-2 border-gray-300 focus:border-realpage-teal focus:outline-none rounded-xl text-gray-800 font-medium transition-all"
               maxLength={200}
               required
             />
@@ -196,12 +196,12 @@ export function QuestionsDialog({ open, onClose, onAddToWheel }: QuestionsDialog
               value={newAnswer}
               onChange={e => setNewAnswer(e.target.value)}
               placeholder="Type the answer (optional)..."
-              className="flex-1 px-4 py-3 border-2 border-gray-300 focus:border-realpage-orange focus:outline-none rounded-xl text-gray-800 font-medium transition-all"
+              className="flex-1 px-4 py-3 border-2 border-gray-300 focus:border-realpage-teal focus:outline-none rounded-xl text-gray-800 font-medium transition-all"
               maxLength={500}
             />
             <button
               type="submit"
-              className="px-6 py-3 bg-gradient-to-r from-realpage-orange to-realpage-orange/90 hover:from-realpage-orange hover:to-realpage-orange text-white rounded-xl font-bold shadow-lg hover:shadow-xl transition-all hover:scale-105 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+              className="px-6 py-3 bg-gradient-to-r from-realpage-teal to-realpage-teal-dark hover:from-realpage-teal-light hover:to-realpage-teal text-white rounded-xl font-bold shadow-lg hover:shadow-xl transition-all hover:scale-105 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
               disabled={loading || !newQuestion.trim() || !newIndex.trim()}
             >
               Add
@@ -223,7 +223,7 @@ export function QuestionsDialog({ open, onClose, onAddToWheel }: QuestionsDialog
                   <form key={q.index} onSubmit={handleEditQuestion} className="p-4 rounded-xl bg-yellow-50 border-2 border-yellow-400 shadow-md">
                     <div className="flex flex-col gap-3">
                       <div className="flex items-center gap-2">
-                        <span className="font-bold text-realpage-orange text-lg">#{q.index}</span>
+                        <span className="font-bold text-realpage-teal text-lg">#{q.index}</span>
                         <span className="text-yellow-600 text-sm font-semibold">Editing...</span>
                       </div>
                       <input
@@ -250,19 +250,19 @@ export function QuestionsDialog({ open, onClose, onAddToWheel }: QuestionsDialog
                     </div>
                   </form>
                 ) : (
-                  <div key={q.index} className="p-4 rounded-xl bg-realpage-blue/10 border border-realpage-orange/30 flex items-start gap-3">
+                  <div key={q.index} className="p-4 rounded-xl bg-realpage-blue/10 border border-realpage-teal/30 flex items-start gap-3">
                     <div className="flex-1">
-                      <div className="font-semibold text-realpage-orange text-lg">#{q.index}</div>
+                      <div className="font-semibold text-realpage-teal text-lg">#{q.index}</div>
                       <div className="text-gray-800 font-medium mt-1">Q: {q.question}</div>
                       {q.answers && (
-                        <div className="text-green-700 font-medium mt-2 bg-green-50 p-2 rounded border border-green-200">
+                        <div className="text-realpage-teal-dark font-medium mt-2 bg-realpage-teal-light/20 p-2 rounded border border-realpage-teal/30">
                           <span className="font-bold">A:</span> {q.answers}
                         </div>
                       )}
                     </div>
                     <div className="flex flex-col gap-2">
                       <button
-                        className="px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-bold transition-all hover:scale-105 active:scale-95 text-sm"
+                        className="px-3 py-1 bg-realpage-teal hover:bg-realpage-teal-dark text-white rounded-lg font-bold transition-all hover:scale-105 active:scale-95 text-sm"
                         onClick={() => handleEditClick(q)}
                         title="Edit question"
                       >
@@ -276,7 +276,7 @@ export function QuestionsDialog({ open, onClose, onAddToWheel }: QuestionsDialog
                         Delete
                       </button>
                       <button
-                        className="px-3 py-1 bg-green-600 hover:bg-green-700 text-white rounded-lg font-bold flex items-center justify-center gap-1 transition-all hover:scale-105 active:scale-95 text-sm"
+                        className="px-3 py-1 bg-realpage-teal-dark hover:bg-realpage-teal text-white rounded-lg font-bold flex items-center justify-center gap-1 transition-all hover:scale-105 active:scale-95 text-sm"
                         title="Add to Wheel"
                         onClick={() => handleAddToWheel(q)}
                       >

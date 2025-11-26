@@ -28,12 +28,12 @@
 
   .custom-scrollbar::-webkit-scrollbar-thumb,
   .scrollbar-thin::-webkit-scrollbar-thumb {
-    @apply bg-realpage-orange/50 rounded-full;
+    @apply bg-realpage-teal/50 rounded-full;
   }
 
   .custom-scrollbar::-webkit-scrollbar-thumb:hover,
   .scrollbar-thin::-webkit-scrollbar-thumb:hover {
-    @apply bg-realpage-orange/70;
+    @apply bg-realpage-teal/70;
   }
 
   .scrollbar-track-gray-200::-webkit-scrollbar-track {

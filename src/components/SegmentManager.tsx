@@ -17,7 +17,7 @@ export function SegmentManager({ onAddSegment }) {
   return (
     <div className="w-full">
       <button
-        className="w-full flex items-center justify-center gap-3 px-6 py-4 bg-gradient-to-r from-realpage-orange to-realpage-orange/90 hover:from-realpage-orange hover:to-realpage-orange text-white rounded-xl font-bold shadow-lg hover:shadow-xl transition-all hover:scale-105 active:scale-95 border-2 border-realpage-orange/50"
+        className="w-full flex items-center justify-center gap-3 px-6 py-4 bg-gradient-to-r from-realpage-teal to-realpage-teal-dark hover:from-realpage-teal-light hover:to-realpage-teal text-white rounded-xl font-bold shadow-lg hover:shadow-xl transition-all hover:scale-105 active:scale-95 border-2 border-realpage-teal-light/50"
         onClick={() => setOpen(true)}
       >
         <List className="w-6 h-6" />

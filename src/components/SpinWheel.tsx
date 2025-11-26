@@ -19,9 +19,11 @@ interface SpinWheelProps {
 }
 
 const COLORS = [
-  '#001a4aff',
-  '#e56205ff',
-  '#FFFFFF',
+  '#0C2340', // realpage-blue-dark
+  '#7DD3C0', // realpage-teal-light
+  '#5DBEAA', // realpage-teal
+  '#3D9A88', // realpage-teal-dark
+  '#D4D4D4', // realpage-gray-light
 ];
 
 export function SpinWheel({ segments, onSpinComplete, LogosComponent, onRepopulateWheel, historyCount = 0 }: SpinWheelProps) {
@@ -30,6 +32,7 @@ export function SpinWheel({ segments, onSpinComplete, LogosComponent, onRepopula
   const [selectedSegment, setSelectedSegment] = useState<Topic | null>(null);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [showAnswer, setShowAnswer] = useState(false);
+  const [autoCloseTimeout, setAutoCloseTimeout] = useState<NodeJS.Timeout | null>(null);
   const wheelRef = useRef<HTMLDivElement>(null);
 
   const segmentAngle = segments.length > 0 ? 360 / segments.length : 0;
@@ -71,7 +74,7 @@ export function SpinWheel({ segments, onSpinComplete, LogosComponent, onRepopula
         particleCount: 150,
         spread: 100,
         origin: { y: 0.6 },
-        colors: ['#00205B', '#FF6B00', '#FFFFFF'],
+        colors: ['#00205B', '#7DD3C0', '#5DBEAA', '#3D9A88'],
         scalar: 1.2,
       });
 
@@ -81,14 +84,14 @@ export function SpinWheel({ segments, onSpinComplete, LogosComponent, onRepopula
           angle: 60,
           spread: 70,
           origin: { x: 0, y: 0.6 },
-          colors: ['#00205B', '#FF6B00', '#FFFFFF'],
+          colors: ['#00205B', '#7DD3C0', '#5DBEAA'],
         });
         confetti({
           particleCount: 80,
           angle: 120,
           spread: 70,
           origin: { x: 1, y: 0.6 },
-          colors: ['#00205B', '#FF6B00', '#FFFFFF'],
+          colors: ['#00205B', '#7DD3C0', '#5DBEAA'],
         });
       }, 250);
     }, 5000);
@@ -122,6 +125,20 @@ export function SpinWheel({ segments, onSpinComplete, LogosComponent, onRepopula
   // Font size: shrink as segments grow, but keep readable
   const topicFontSize = Math.max(18, 38 - Math.floor(segments.length * 0.7));
 
+  // Auto-close winner overlay after 20 seconds
+  useEffect(() => {
+    if (selectedSegment) {
+      if (autoCloseTimeout) clearTimeout(autoCloseTimeout);
+      const timeout = setTimeout(() => {
+        setSelectedSegment(null);
+        setShowAnswer(false);
+      }, 12000);
+      setAutoCloseTimeout(timeout);
+      return () => clearTimeout(timeout);
+    }
+    if (autoCloseTimeout) clearTimeout(autoCloseTimeout);
+  }, [selectedSegment]);
+
   return (
     <div className="flex flex-col items-center gap-8 w-full">
       <div
@@ -138,7 +155,7 @@ export function SpinWheel({ segments, onSpinComplete, LogosComponent, onRepopula
         {!isFullscreen && (
           <button
             onClick={handleFullscreen}
-            className="absolute top-4 right-4 z-50 p-3 rounded-xl bg-realpage-orange/90 hover:bg-realpage-orange border-2 border-white/50 shadow-xl transition-all hover:scale-110 active:scale-95 glow-orange"
+            className="absolute top-4 right-4 z-50 p-3 rounded-xl bg-realpage-teal/90 hover:bg-realpage-teal border-2 border-white/50 shadow-xl transition-all hover:scale-110 active:scale-95"
             title="Fullscreen"
             type="button"
           >
@@ -149,7 +166,7 @@ export function SpinWheel({ segments, onSpinComplete, LogosComponent, onRepopula
           <>
             <button
               onClick={handleFullscreen}
-              className="absolute top-4 right-4 z-[150] p-3 rounded-xl bg-realpage-orange/90 hover:bg-realpage-orange border-2 border-white/50 shadow-xl transition-all hover:scale-110 active:scale-95 glow-orange"
+              className="absolute top-4 right-4 z-[150] p-3 rounded-xl bg-realpage-teal/90 hover:bg-realpage-teal border-2 border-white/50 shadow-xl transition-all hover:scale-110 active:scale-95"
               title="Exit Fullscreen"
               type="button"
             >
@@ -160,7 +177,7 @@ export function SpinWheel({ segments, onSpinComplete, LogosComponent, onRepopula
             {historyCount > 0 && onRepopulateWheel && (
               <button
                 onClick={onRepopulateWheel}
-                className="absolute top-4 left-1/2 transform -translate-x-1/2 z-[150] px-6 py-3 rounded-xl bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white font-bold shadow-xl transition-all hover:scale-105 active:scale-95 border-2 border-green-400/50"
+                className="absolute top-4 left-1/2 transform -translate-x-1/2 z-[150] px-6 py-3 rounded-xl bg-gradient-to-r from-realpage-teal to-realpage-teal-dark hover:from-realpage-teal-light hover:to-realpage-teal text-white font-bold shadow-xl transition-all hover:scale-105 active:scale-95 border-2 border-realpage-teal-light/50"
                 title="Restore all questions to wheel"
                 type="button"
               >
@@ -171,11 +188,12 @@ export function SpinWheel({ segments, onSpinComplete, LogosComponent, onRepopula
         )}
 
         <div
-          className={`relative rounded-full bg-white/5 backdrop-blur-sm border-4 border-realpage-orange/50 shadow-2xl flex items-center justify-center glow-orange transition-all duration-300 ${isSpinning ? 'scale-105' : 'scale-100'}`}
+          className={`relative rounded-full bg-white/5 backdrop-blur-sm border-4 border-realpage-teal/50 shadow-2xl flex items-center justify-center transition-all duration-300 ${isSpinning ? 'scale-105' : 'scale-100'}`}
           style={{
             width: wheelSize,
             height: wheelSize,
             margin: isFullscreen ? 'auto' : undefined,
+            boxShadow: '0 0 20px rgba(125, 211, 192, 0.3), 0 0 40px rgba(125, 211, 192, 0.2), 0 0 60px rgba(125, 211, 192, 0.1)',
           }}
         >
           <motion.div
@@ -197,8 +215,8 @@ export function SpinWheel({ segments, onSpinComplete, LogosComponent, onRepopula
                 height: 0,
                 borderLeft: `${Math.round(wheelSize * 0.03)}px solid transparent`,
                 borderRight: `${Math.round(wheelSize * 0.03)}px solid transparent`,
-                borderBottom: `${Math.round(wheelSize * 0.045)}px solid #FF6B00`,
-                filter: 'drop-shadow(0 4px 12px rgba(255, 107, 0, 0.8))',
+                borderBottom: `${Math.round(wheelSize * 0.045)}px solid #7DD3C0`,
+                filter: 'drop-shadow(0 4px 12px rgba(125, 211, 192, 0.8))',
               }}
             ></div>
           </motion.div>
@@ -216,11 +234,11 @@ export function SpinWheel({ segments, onSpinComplete, LogosComponent, onRepopula
               disabled={isSpinning || segments.length === 0}
               className={`
                 group relative rounded-full font-black text-lg
-                bg-gradient-to-br from-realpage-orange via-realpage-orange to-realpage-orange/80
-                hover:from-realpage-orange hover:via-realpage-orange/90 hover:to-realpage-orange
+                bg-gradient-to-br from-realpage-teal via-realpage-teal to-realpage-teal-dark
+                hover:from-realpage-teal-light hover:via-realpage-teal/90 hover:to-realpage-teal
                 disabled:from-gray-600 disabled:to-gray-700 disabled:cursor-not-allowed
                 transition-all duration-300
-                shadow-2xl shadow-realpage-orange/60
+                shadow-2xl
                 disabled:shadow-none
                 border-4 border-white/30
                 ${isSpinning ? 'animate-pulse-glow' : 'hover:scale-110 active:scale-95'}
@@ -229,6 +247,7 @@ export function SpinWheel({ segments, onSpinComplete, LogosComponent, onRepopula
                 width: Math.round(wheelSize * 0.18),
                 height: Math.round(wheelSize * 0.18),
                 fontSize: Math.max(18, Math.round(wheelSize * 0.025)),
+                boxShadow: isSpinning ? 'none' : '0 0 40px rgba(125, 211, 192, 0.6)',
               }}
               whileTap={{ scale: 0.9 }}
               whileHover={{ scale: 1.1 }}
@@ -252,11 +271,11 @@ export function SpinWheel({ segments, onSpinComplete, LogosComponent, onRepopula
                   </>
                 )}
               </span>
-              <div className="absolute -inset-2 rounded-full bg-gradient-to-r from-realpage-orange to-white opacity-0 group-hover:opacity-40 blur-2xl transition-opacity -z-10"></div>
+              <div className="absolute -inset-2 rounded-full bg-gradient-to-r from-realpage-teal to-white opacity-0 group-hover:opacity-40 blur-2xl transition-opacity -z-10"></div>
             </motion.button>
           </div>
 
-          {/* Wheel SVG - segments and topics spin together */}
+          {/* Wheel SVG */}
           <div className="relative">
             <svg
               width={wheelSize}
@@ -283,14 +302,14 @@ export function SpinWheel({ segments, onSpinComplete, LogosComponent, onRepopula
                 cy={center}
                 r={wheelRadius}
                 fill="url(#wheel-gradient)"
-                stroke="#FF6B00"
+                stroke="#7DD3C0"
                 strokeWidth={Math.max(6, wheelSize * 0.008)}
                 filter="url(#shadow)"
               />
               <defs>
                 <radialGradient id="wheel-gradient">
                   <stop offset="0%" stopColor="#FFFFFF" stopOpacity="0.1" />
-                  <stop offset="100%" stopColor="#00205B" stopOpacity="0.2" />
+                  <stop offset="100%" stopColor="#0C2340" stopOpacity="0.2" />
                 </radialGradient>
               </defs>
               {/* Segments and topics spin together */}
@@ -322,8 +341,8 @@ export function SpinWheel({ segments, onSpinComplete, LogosComponent, onRepopula
                     <g key={index}>
                       <path
                         d={`M ${center} ${center} L ${x1} ${y1} A ${wheelRadius} ${wheelRadius} 0 ${largeArcFlag} 1 ${x2} ${y2} Z`}
-                        fill={COLORS[index % COLORS.length]} // Use solid color
-                        stroke="#00205B"
+                        fill={COLORS[index % COLORS.length]}
+                        stroke="#0C2340"
                         strokeWidth={Math.max(3, wheelSize * 0.004)}
                         className="transition-opacity hover:opacity-90"
                       />
@@ -354,20 +373,20 @@ export function SpinWheel({ segments, onSpinComplete, LogosComponent, onRepopula
                 cy={center}
                 r={Math.max(80, wheelSize * 0.13)}
                 fill="url(#center-gradient)"
-                stroke="#FF6B00"
+                stroke="#7DD3C0"
                 strokeWidth={Math.max(6, wheelSize * 0.008)}
               />
               <defs>
                 <linearGradient id="center-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" style={{ stopColor: '#00205B', stopOpacity: 1 }} />
-                  <stop offset="100%" style={{ stopColor: '#FF6B00', stopOpacity: 1 }} />
+                  <stop offset="0%" style={{ stopColor: '#0C2340', stopOpacity: 1 }} />
+                  <stop offset="100%" style={{ stopColor: '#7DD3C0', stopOpacity: 1 }} />
                 </linearGradient>
               </defs>
             </svg>
           </div>
         </div>
 
-        {/* Winner overlay always visible in fullscreen - move inside wheelRef container */}
+        {/* Winner overlay - fullscreen */}
         {isFullscreen && (
           <AnimatePresence>
             {selectedSegment && (
@@ -384,14 +403,15 @@ export function SpinWheel({ segments, onSpinComplete, LogosComponent, onRepopula
                   animate={{ scale: 1, opacity: 1, y: 0 }}
                   exit={{ scale: 0.5, opacity: 0, y: 50 }}
                   transition={{ type: "spring", duration: 0.6, bounce: 0.4 }}
-                  className="relative bg-gradient-to-br from-realpage-blue via-realpage-blue to-realpage-blue/95 backdrop-blur-xl px-12 md:px-16 py-12 md:py-14 rounded-3xl border-8 border-realpage-orange shadow-2xl max-w-3xl w-[95%] md:w-[90%] glow-orange"
+                  className="relative bg-gradient-to-br from-realpage-blue-dark via-realpage-blue to-realpage-blue-darker backdrop-blur-xl px-12 md:px-16 py-12 md:py-14 rounded-3xl border-8 border-realpage-teal shadow-2xl max-w-3xl w-[95%] md:w-[90%]"
+                  style={{ boxShadow: '0 0 60px rgba(125, 211, 192, 0.4)' }}
                   onClick={(e) => e.stopPropagation()}
                 >
-                  <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-realpage-orange/20 rounded-3xl"></div>
-                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(255,107,0,0.1),transparent_50%)] rounded-3xl"></div>
+                  <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-realpage-teal/20 rounded-3xl"></div>
+                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(125,211,192,0.1),transparent_50%)] rounded-3xl"></div>
                   <button
                     onClick={() => setSelectedSegment(null)}
-                    className="absolute -top-6 -right-6 p-4 rounded-full bg-gradient-to-br from-realpage-orange to-realpage-orange/80 text-white hover:from-realpage-orange hover:to-realpage-orange shadow-2xl transition-all hover:scale-110 active:scale-95 border-4 border-white z-10 glow-orange"
+                    className="absolute -top-6 -right-6 p-4 rounded-full bg-gradient-to-br from-realpage-teal to-realpage-teal-dark text-white hover:from-realpage-teal-light hover:to-realpage-teal shadow-2xl transition-all hover:scale-110 active:scale-95 border-4 border-white z-10"
                     aria-label="Close"
                   >
                     <X className="w-8 h-8" />
@@ -402,20 +422,20 @@ export function SpinWheel({ segments, onSpinComplete, LogosComponent, onRepopula
                       animate={{ scale: 1 }}
                       transition={{ delay: 0.2, type: "spring", bounce: 0.5 }}
                     >
-                      <div className="inline-flex items-center gap-3 mb-4 px-6 py-3 bg-white/5 rounded-full border border-realpage-orange/30">
-                        <div className="w-3 h-3 rounded-full bg-realpage-orange animate-pulse shadow-lg shadow-realpage-orange/50"></div>
+                      <div className="inline-flex items-center gap-3 mb-4 px-6 py-3 bg-white/5 rounded-full border border-realpage-teal/30">
+                        <div className="w-3 h-3 rounded-full bg-realpage-teal animate-pulse shadow-lg shadow-realpage-teal/50"></div>
                         <p className="text-xl md:text-2xl font-bold text-white/95 uppercase tracking-widest">
                           Question Time
                         </p>
-                        <div className="w-3 h-3 rounded-full bg-realpage-orange animate-pulse shadow-lg shadow-realpage-orange/50"></div>
+                        <div className="w-3 h-3 rounded-full bg-realpage-teal animate-pulse shadow-lg shadow-realpage-teal/50"></div>
                       </div>
                     </motion.div>
                     <motion.p
                       initial={{ y: 20, opacity: 0 }}
                       animate={{ y: 0, opacity: 1 }}
                       transition={{ delay: 0.3 }}
-                      className="text-5xl md:text-7xl font-black text-realpage-orange break-words leading-tight drop-shadow-2xl"
-                      style={{ textShadow: '0 0 40px rgba(255, 107, 0, 0.6), 0 0 80px rgba(255, 107, 0, 0.3)' }}
+                      className="text-5xl md:text-7xl font-black text-realpage-teal break-words leading-tight drop-shadow-2xl"
+                      style={{ textShadow: '0 0 40px rgba(125, 211, 192, 0.6), 0 0 80px rgba(125, 211, 192, 0.3)' }}
                     >
                       {selectedSegment.name}
                     </motion.p>
@@ -439,14 +459,14 @@ export function SpinWheel({ segments, onSpinComplete, LogosComponent, onRepopula
                         className="mt-6"
                       >
                         {showAnswer ? (
-                          <div className="bg-green-500/20 border-2 border-green-400 rounded-xl p-6">
-                            <p className="text-green-300 font-bold text-base uppercase mb-3 tracking-wider">Answer:</p>
+                          <div className="bg-realpage-teal/20 border-2 border-realpage-teal-light rounded-xl p-6">
+                            <p className="text-realpage-teal-light font-bold text-base uppercase mb-3 tracking-wider">Answer:</p>
                             <p className="text-white text-lg md:text-xl font-semibold leading-relaxed">{selectedSegment.answers}</p>
                           </div>
                         ) : (
                           <button
                             onClick={() => setShowAnswer(true)}
-                            className="px-8 py-4 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white font-bold rounded-xl transition-all hover:scale-105 active:scale-95 shadow-2xl border-2 border-green-400/50"
+                            className="px-8 py-4 bg-gradient-to-r from-realpage-teal to-realpage-teal-dark hover:from-realpage-teal-light hover:to-realpage-teal text-white font-bold rounded-xl transition-all hover:scale-105 active:scale-95 shadow-2xl border-2 border-realpage-teal-light/50"
                           >
                             Show Answer
                           </button>
@@ -472,7 +492,7 @@ export function SpinWheel({ segments, onSpinComplete, LogosComponent, onRepopula
         )}
       </div>
 
-      {/* Hide everything except wheel, triangle, spin button, winner overlay in fullscreen */}
+      {/* Winner overlay - not fullscreen */}
       {!isFullscreen && (
         <AnimatePresence>
           {selectedSegment && (
@@ -488,15 +508,16 @@ export function SpinWheel({ segments, onSpinComplete, LogosComponent, onRepopula
                 animate={{ scale: 1, opacity: 1, y: 0 }}
                 exit={{ scale: 0.5, opacity: 0, y: 50 }}
                 transition={{ type: "spring", duration: 0.6, bounce: 0.4 }}
-                className="relative bg-gradient-to-br from-realpage-blue via-realpage-blue to-realpage-blue/95 backdrop-blur-xl px-12 md:px-16 py-12 md:py-14 rounded-3xl border-8 border-realpage-orange shadow-2xl max-w-3xl w-[95%] md:w-[90%] glow-orange"
+                className="relative bg-gradient-to-br from-realpage-blue-dark via-realpage-blue to-realpage-blue-darker backdrop-blur-xl px-12 md:px-16 py-12 md:py-14 rounded-3xl border-8 border-realpage-teal shadow-2xl max-w-3xl w-[95%] md:w-[90%]"
+                style={{ boxShadow: '0 0 60px rgba(125, 211, 192, 0.4)' }}
                 onClick={(e) => e.stopPropagation()}
               >
-                <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-realpage-orange/20 rounded-3xl"></div>
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(255,107,0,0.1),transparent_50%)] rounded-3xl"></div>
+                <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-realpage-teal/20 rounded-3xl"></div>
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(125,211,192,0.1),transparent_50%)] rounded-3xl"></div>
 
                 <button
                   onClick={() => setSelectedSegment(null)}
-                  className="absolute -top-6 -right-6 p-4 rounded-full bg-gradient-to-br from-realpage-orange to-realpage-orange/80 text-white hover:from-realpage-orange hover:to-realpage-orange shadow-2xl transition-all hover:scale-110 active:scale-95 border-4 border-white z-10 glow-orange"
+                  className="absolute -top-6 -right-6 p-4 rounded-full bg-gradient-to-br from-realpage-teal to-realpage-teal-dark text-white hover:from-realpage-teal-light hover:to-realpage-teal shadow-2xl transition-all hover:scale-110 active:scale-95 border-4 border-white z-10"
                   aria-label="Close"
                 >
                   <X className="w-8 h-8" />
@@ -508,12 +529,12 @@ export function SpinWheel({ segments, onSpinComplete, LogosComponent, onRepopula
                     animate={{ scale: 1 }}
                     transition={{ delay: 0.2, type: "spring", bounce: 0.5 }}
                   >
-                    <div className="inline-flex items-center gap-3 mb-4 px-6 py-3 bg-white/5 rounded-full border border-realpage-orange/30">
-                      <div className="w-3 h-3 rounded-full bg-realpage-orange animate-pulse shadow-lg shadow-realpage-orange/50"></div>
+                    <div className="inline-flex items-center gap-3 mb-4 px-6 py-3 bg-white/5 rounded-full border border-realpage-teal/30">
+                      <div className="w-3 h-3 rounded-full bg-realpage-teal animate-pulse shadow-lg shadow-realpage-teal/50"></div>
                       <p className="text-xl md:text-2xl font-bold text-white/95 uppercase tracking-widest">
                         Question Time
                       </p>
-                      <div className="w-3 h-3 rounded-full bg-realpage-orange animate-pulse shadow-lg shadow-realpage-orange/50"></div>
+                      <div className="w-3 h-3 rounded-full bg-realpage-teal animate-pulse shadow-lg shadow-realpage-teal/50"></div>
                     </div>
                   </motion.div>
 
@@ -521,8 +542,8 @@ export function SpinWheel({ segments, onSpinComplete, LogosComponent, onRepopula
                     initial={{ y: 20, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
                     transition={{ delay: 0.3 }}
-                    className="text-5xl md:text-7xl font-black text-realpage-orange break-words leading-tight drop-shadow-2xl"
-                    style={{ textShadow: '0 0 40px rgba(255, 107, 0, 0.6), 0 0 80px rgba(255, 107, 0, 0.3)' }}
+                    className="text-5xl md:text-7xl font-black text-realpage-teal break-words leading-tight drop-shadow-2xl"
+                    style={{ textShadow: '0 0 40px rgba(125, 211, 192, 0.6), 0 0 80px rgba(125, 211, 192, 0.3)' }}
                   >
                     {selectedSegment.name}
                   </motion.p>
@@ -547,14 +568,14 @@ export function SpinWheel({ segments, onSpinComplete, LogosComponent, onRepopula
                       className="mt-6"
                     >
                       {showAnswer ? (
-                        <div className="bg-green-500/20 border-2 border-green-400 rounded-xl p-6">
-                          <p className="text-green-300 font-bold text-base uppercase mb-3 tracking-wider">Answer:</p>
+                        <div className="bg-realpage-teal/20 border-2 border-realpage-teal-light rounded-xl p-6">
+                          <p className="text-realpage-teal-light font-bold text-base uppercase mb-3 tracking-wider">Answer:</p>
                           <p className="text-white text-lg md:text-xl font-semibold leading-relaxed">{selectedSegment.answers}</p>
                         </div>
                       ) : (
                         <button
                           onClick={() => setShowAnswer(true)}
-                          className="px-8 py-4 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white font-bold rounded-xl transition-all hover:scale-105 active:scale-95 shadow-2xl border-2 border-green-400/50"
+                          className="px-8 py-4 bg-gradient-to-r from-realpage-teal to-realpage-teal-dark hover:from-realpage-teal-light hover:to-realpage-teal text-white font-bold rounded-xl transition-all hover:scale-105 active:scale-95 shadow-2xl border-2 border-realpage-teal-light/50"
                         >
                           Show Answer
                         </button>
