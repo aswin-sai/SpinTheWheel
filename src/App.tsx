@@ -19,11 +19,12 @@ function Logos({ fullscreen = false }: { fullscreen?: boolean }) {
         alt="RealPage Logo"
         className="object-contain"
         style={{
-          height: fullscreen ? '120px' : '80px',
+          height: fullscreen ? 'clamp(60px, 8vw, 120px)' : 'clamp(40px, 6vw, 80px)',
           width: 'auto',
+          maxWidth: fullscreen ? '200px' : '150px',
           position: 'fixed',
-          left: 0,
-          top: 0,
+          left: fullscreen ? '8px' : '4px',
+          top: fullscreen ? '8px' : '4px',
           margin: 0,
           zIndex: 101,
           pointerEvents: 'none',
@@ -35,12 +36,13 @@ function Logos({ fullscreen = false }: { fullscreen?: boolean }) {
         alt="Career Elevate Logo"
         className="object-contain rounded-lg"
         style={{
-          height: fullscreen ? '220px' : '160px',
+          height: fullscreen ? 'clamp(80px, 10vw, 180px)' : 'clamp(60px, 8vw, 140px)',
           width: 'auto',
-          position: fullscreen ? 'fixed' : 'absolute',
-          right: fullscreen ? '24px' : '8px',
-          top: fullscreen ? '24px' : '50%',
-          transform: fullscreen ? 'none' : 'translateY(-50%)',
+          maxWidth: fullscreen ? '180px' : '140px',
+          position: 'fixed',
+          right: fullscreen ? '8px' : '4px',
+          top: fullscreen ? '8px' : '4px',
+          margin: 0,
           zIndex: 101,
           pointerEvents: 'none',
           filter: 'drop-shadow(0 4px 12px rgba(0, 0, 0, 0.3))',
