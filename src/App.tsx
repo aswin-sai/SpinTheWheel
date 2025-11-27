@@ -163,7 +163,7 @@ function App() {
               </div>
               <div className="text-center">
                 <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black tracking-tight leading-tight">
-                  <span className="bg-gradient-to-r from-white via-realpage-orange to-white bg-clip-text text-transparent drop-shadow-2xl">
+                  <span className="text-realpage-teal drop-shadow-2xl">
                     Do You REAL-LY Know?
                   </span>
                 </h1>
