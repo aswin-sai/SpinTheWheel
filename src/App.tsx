@@ -21,7 +21,7 @@ function Logos({ fullscreen = false }: { fullscreen?: boolean }) {
         style={{
           height: fullscreen ? 'clamp(60px, 8vw, 120px)' : 'clamp(40px, 6vw, 80px)',
           width: 'auto',
-          maxWidth: fullscreen ? '200px' : '150px',
+          maxWidth: fullscreen ? '250px' : '190px',
           position: 'fixed',
           left: fullscreen ? '8px' : '4px',
           top: fullscreen ? '8px' : '4px',
@@ -38,7 +38,7 @@ function Logos({ fullscreen = false }: { fullscreen?: boolean }) {
         style={{
           height: fullscreen ? 'clamp(80px, 10vw, 180px)' : 'clamp(60px, 8vw, 140px)',
           width: 'auto',
-          maxWidth: fullscreen ? '180px' : '140px',
+          maxWidth: fullscreen ? '380px' : '190px',
           position: 'fixed',
           right: fullscreen ? '8px' : '4px',
           top: fullscreen ? '8px' : '4px',

@@ -33,6 +33,7 @@ export function SpinWheel({ segments, onSpinComplete, LogosComponent, onRepopula
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [showAnswer, setShowAnswer] = useState(false);
   const [autoCloseTimeout, setAutoCloseTimeout] = useState<NodeJS.Timeout | null>(null);
+  const [countdown, setCountdown] = useState(12); // Add countdown state
   const wheelRef = useRef<HTMLDivElement>(null);
 
   const segmentAngle = segments.length > 0 ? 360 / segments.length : 0;
@@ -125,16 +126,38 @@ export function SpinWheel({ segments, onSpinComplete, LogosComponent, onRepopula
   // Font size: shrink as segments grow, but keep readable
   const topicFontSize = Math.max(18, 38 - Math.floor(segments.length * 0.7));
 
-  // Auto-close winner overlay after 20 seconds
+  // Auto-close winner overlay after 12 seconds with countdown
   useEffect(() => {
     if (selectedSegment) {
       if (autoCloseTimeout) clearTimeout(autoCloseTimeout);
+      
+      // Reset countdown
+      setCountdown(12);
+      
+      // Countdown interval
+      const countdownInterval = setInterval(() => {
+        setCountdown(prev => {
+          if (prev <= 1) {
+            clearInterval(countdownInterval);
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+      
+      // Auto-close timeout
       const timeout = setTimeout(() => {
         setSelectedSegment(null);
         setShowAnswer(false);
+        clearInterval(countdownInterval);
       }, 12000);
+      
       setAutoCloseTimeout(timeout);
-      return () => clearTimeout(timeout);
+      
+      return () => {
+        clearTimeout(timeout);
+        clearInterval(countdownInterval);
+      };
     }
     if (autoCloseTimeout) clearTimeout(autoCloseTimeout);
   }, [selectedSegment]);
@@ -409,6 +432,42 @@ export function SpinWheel({ segments, onSpinComplete, LogosComponent, onRepopula
                 >
                   <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-realpage-teal/20 rounded-3xl"></div>
                   <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(125,211,192,0.1),transparent_50%)] rounded-3xl"></div>
+                  
+                  {/* Countdown Timer - Inside popup at top-left to avoid close button */}
+                  <div className="absolute top-4 left-4 z-10">
+                    <div className="relative">
+                      <svg className="w-16 h-16 transform -rotate-90">
+                        <circle
+                          cx="32"
+                          cy="32"
+                          r="28"
+                          stroke="rgba(125, 211, 192, 0.2)"
+                          strokeWidth="6"
+                          fill="none"
+                        />
+                        <motion.circle
+                          cx="32"
+                          cy="32"
+                          r="28"
+                          stroke="#7DD3C0"
+                          strokeWidth="6"
+                          fill="none"
+                          strokeDasharray={176}
+                          strokeDashoffset={176 - (176 * countdown) / 12}
+                          strokeLinecap="round"
+                          initial={{ strokeDashoffset: 176 }}
+                          animate={{ strokeDashoffset: 176 - (176 * countdown) / 12 }}
+                          transition={{ duration: 0.3 }}
+                        />
+                      </svg>
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <span className="text-xl font-black text-realpage-teal drop-shadow-lg">
+                          {countdown}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
                   <button
                     onClick={() => setSelectedSegment(null)}
                     className="absolute -top-6 -right-6 p-4 rounded-full bg-gradient-to-br from-realpage-teal to-realpage-teal-dark text-white hover:from-realpage-teal-light hover:to-realpage-teal shadow-2xl transition-all hover:scale-110 active:scale-95 border-4 border-white z-10"
@@ -416,6 +475,7 @@ export function SpinWheel({ segments, onSpinComplete, LogosComponent, onRepopula
                   >
                     <X className="w-8 h-8" />
                   </button>
+                  
                   <div className="relative text-center space-y-6">
                     <motion.div
                       initial={{ scale: 0 }}
@@ -514,6 +574,41 @@ export function SpinWheel({ segments, onSpinComplete, LogosComponent, onRepopula
               >
                 <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-realpage-teal/20 rounded-3xl"></div>
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(125,211,192,0.1),transparent_50%)] rounded-3xl"></div>
+
+                {/* Countdown Timer - Inside popup at top-left to avoid close button */}
+                <div className="absolute top-4 left-4 z-10">
+                  <div className="relative">
+                    <svg className="w-16 h-16 transform -rotate-90">
+                      <circle
+                        cx="32"
+                        cy="32"
+                        r="28"
+                        stroke="rgba(125, 211, 192, 0.2)"
+                        strokeWidth="6"
+                        fill="none"
+                      />
+                      <motion.circle
+                        cx="32"
+                        cy="32"
+                        r="28"
+                        stroke="#7DD3C0"
+                        strokeWidth="6"
+                        fill="none"
+                        strokeDasharray={176}
+                        strokeDashoffset={176 - (176 * countdown) / 12}
+                        strokeLinecap="round"
+                        initial={{ strokeDashoffset: 176 }}
+                        animate={{ strokeDashoffset: 176 - (176 * countdown) / 12 }}
+                        transition={{ duration: 0.3 }}
+                      />
+                    </svg>
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <span className="text-xl font-black text-realpage-teal drop-shadow-lg">
+                        {countdown}
+                      </span>
+                    </div>
+                  </div>
+                </div>
 
                 <button
                   onClick={() => setSelectedSegment(null)}
