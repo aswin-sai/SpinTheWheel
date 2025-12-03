@@ -33,7 +33,7 @@ export function SpinWheel({ segments, onSpinComplete, LogosComponent, onRepopula
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [showAnswer, setShowAnswer] = useState(false);
   const [autoCloseTimeout, setAutoCloseTimeout] = useState<NodeJS.Timeout | null>(null);
-  const [countdown, setCountdown] = useState(12); // Add countdown state
+  const [countdown, setCountdown] = useState(15); // 15 seconds timer
   const wheelRef = useRef<HTMLDivElement>(null);
 
   const segmentAngle = segments.length > 0 ? 360 / segments.length : 0;
@@ -126,37 +126,35 @@ export function SpinWheel({ segments, onSpinComplete, LogosComponent, onRepopula
   // Font size: shrink as segments grow, but keep readable
   const topicFontSize = Math.max(18, 38 - Math.floor(segments.length * 0.7));
 
-  // Auto-close winner overlay after 12 seconds with countdown
+  // Auto-close winner overlay after 15 seconds, show answer for 3 seconds before closing
   useEffect(() => {
     if (selectedSegment) {
       if (autoCloseTimeout) clearTimeout(autoCloseTimeout);
-      
-      // Reset countdown
-      setCountdown(12);
-      
-      // Countdown interval
+
+      setCountdown(15);
+
+      let answerShown = false;
       const countdownInterval = setInterval(() => {
         setCountdown(prev => {
           if (prev <= 1) {
             clearInterval(countdownInterval);
+            setShowAnswer(true);
+            answerShown = true;
+            // Show answer for 3 seconds, then close
+            setTimeout(() => {
+              setSelectedSegment(null);
+              setShowAnswer(false);
+            }, 5000);
             return 0;
           }
           return prev - 1;
         });
       }, 1000);
-      
-      // Auto-close timeout
-      const timeout = setTimeout(() => {
-        setSelectedSegment(null);
-        setShowAnswer(false);
-        clearInterval(countdownInterval);
-      }, 12000);
-      
-      setAutoCloseTimeout(timeout);
-      
+
+      // Safety: clear everything if unmounted
       return () => {
-        clearTimeout(timeout);
         clearInterval(countdownInterval);
+        if (!answerShown) setShowAnswer(false);
       };
     }
     if (autoCloseTimeout) clearTimeout(autoCloseTimeout);
@@ -453,10 +451,10 @@ export function SpinWheel({ segments, onSpinComplete, LogosComponent, onRepopula
                           strokeWidth="6"
                           fill="none"
                           strokeDasharray={176}
-                          strokeDashoffset={176 - (176 * countdown) / 12}
+                          strokeDashoffset={176 - (176 * countdown) / 15}
                           strokeLinecap="round"
                           initial={{ strokeDashoffset: 176 }}
-                          animate={{ strokeDashoffset: 176 - (176 * countdown) / 12 }}
+                          animate={{ strokeDashoffset: 176 - (176 * countdown) / 15 }}
                           transition={{ duration: 0.3 }}
                         />
                       </svg>
@@ -595,10 +593,10 @@ export function SpinWheel({ segments, onSpinComplete, LogosComponent, onRepopula
                         strokeWidth="6"
                         fill="none"
                         strokeDasharray={176}
-                        strokeDashoffset={176 - (176 * countdown) / 12}
+                        strokeDashoffset={176 - (176 * countdown) / 15}
                         strokeLinecap="round"
                         initial={{ strokeDashoffset: 176 }}
-                        animate={{ strokeDashoffset: 176 - (176 * countdown) / 12 }}
+                        animate={{ strokeDashoffset: 176 - (176 * countdown) / 15 }}
                         transition={{ duration: 0.3 }}
                       />
                     </svg>
